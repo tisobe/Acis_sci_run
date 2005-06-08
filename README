@@ -1,0 +1,363 @@
+
+################
+ACIS Science Run
+################
+
+This set of scripts retrieve ACIS science run data from MIT web site, check event rate, error rate, 
+and drop rate and plot trends. If any of these higher than specified limits, it will send out 
+email notification.
+
+##########
+How to run
+##########
+
+Create a directory for computation, then type:
+
+	/data/mta4/MTA/bin/acis_sci_run_wrap_script
+
+The output are automatically directed into /data/mta/www/mta_acis_sci_run directory.
+If you want to change directories of input/output, change $root_dir/$bin_dir/$current_dir etc (see below).
+
+This must be run on rhodes.
+
+###################
+Script descriptions
+###################
+
+All scripts below are in /data/mta4/MTA/bin.
+
+
+Directory setting:
+------------------
+
+$root_dir     = '/data/mta/www/mta_acis_sci_run/';      #--- acis sci run main directory
+
+$bin_dir      = '/data/mta4/MTA/bin/';                  #--- a directory which holds scripts
+
+$bin_data_dir = '/data/mta4/MTA/data/';                 #--- a directory which holds bin data
+
+$current_dir  = 'Year'."$uyear";                        #--- a current output directory (under $root_dir)
+							     $uyear is this year (e.g. 2005)
+
+$http_dir     = 'http://asc.harvard.edu/mta_days/mta_acis_sci_run/';
+							#--- http page address
+
+
+acis_sci_run_wrap_script
+------------------------
+A wrapping script to run acis_sci_run scripts
+
+
+acis_sci_run_script
+-------------------
+A main calling script. This also deletes two directories created and used by acis_sci_run_get_data.perl.
+
+
+acis_sci_run_get_data.perl
+--------------------------
+This is the main script control most of all other scripts related to acis science run.
+
+Input:
+
+	http://acis.mit.edu/asc/: 	MIT ACIS main web page
+					this will be to check which data set is currently updated
+
+	http://acis.mit.edu/asc/acisproc<version>/acis<version>.xs3
+					<version> is a file version of the currently updated page
+	 	----- these pages are read using "/opt/local/bin/lynx -source <http page>"
+
+	$bin_data-dir/col_list2004: this file contains which columns we want to read.
+
+	Descriptions of columns are following:
+		Col     #       Title           Description
+
+		A       0       #               Science run number
+		B       1       obsid           Observation ID
+		C       2       mode            "SI mode (ACIS-I,ACIS-S,HRC-I,HRC-S,NONE)"
+		D       3       otgm            "OTG mode (HETG,LETG,NONE)"
+		E       4       seqnum          Observation sequence number
+		F       5       targetname      Short name of target
+		G       6       ao              AO phase
+		H       7       vcdu            VCDU frame of start of science run
+		I       8       start           Doy:Sec of start of ACIS exposure Number
+		J       9       stop            Doy:Sec of start of last ACIS exposure Number
+		K       10      ksec            Duration of run in kiloseconds
+		L       11      prcnt           Percentage of sent exposure frames processed
+		M       12      ccd             "Type: {I,S}, and number of CCDs clocked"
+		N       13      frames          Number of exposure frames downlinked
+		O       14      events          Number of events downlinked
+		P       15      eps             Average number of events downlinked per second
+		Q       16      errs            Number of errors reported by `psci'
+		R       17      drop            Percentage of exposures dropped
+		S       18      berr            Number of bias parity errors reported
+		T       19      plow            Number of anomalously low pixel values
+		U       20      blow            Number of anomalously low bias values
+		V       21      pblock          Science parameter block ID
+		W       22      wblock          Window block ID
+		X       23      nw              Number of windows used
+		Y       24      mode            "FEP mode: {Cc,Te}, {1x3,3x3,5x5,Raw,Hist}"
+		Z       25      bm              "BEP mode: {G,F,FB,EH}"
+		AA      26      rw0             Starting CCD row index (first row = 0)
+		AB      27      rows            Number of CCD rows              int
+		AC      28      t1              Primary exposure time (x 0.1 sec) - TE mode only
+		AD      29      t2              Secondary exposure time (x 0.1 sec) - TE mode only
+		AE      30      d               Duty Cycle - TE mode only
+		AF      31      s               On-chip summing enabled (1) or disabled (0)
+		AG      32      b               New bias maps must be computed (1) or not (0)
+		AH      33      t               Bias maps to be telemetered (1) or not (0)
+		AI      34      nb              Science run number of appropriate bias map
+		AJ      35      temp            Average focal plane temperature for this OBSID
+		AK      36      btmp            Average focal plane temperature during bias
+		AL      37      procdate        PSCI processing date
+		AM      38      start           Doy.fract of start of ACIS exposureNumber 0
+		AN      39      stop            Doy.fract of last ACIS exposureNumber   [8]
+		AO      40      starttime       Start time of exposureNumber 0 as yy-mm-dd hh:mm:ss
+		AP      41      cxctime         Start time of exposureNumber 0 as seconds from 1998.0
+		AQ      42      ao1             Kiloseconds of AO 1 observing time
+		AR      43      ao2             Kiloseconds of AO 2 observing time
+		AS      44      ao3             Kiloseconds of AO 3 observing time
+		AT      45      cal             Kiloseconds of CAL observing time
+		AU      46      fep0            Kiloseconds of FEP_0 run time
+		AV      47      eh0             Kiloseconds of FEP_0 runtime in Event Histogram mode
+		AW      48      drop            Percentage of exposures dropped in non-cal runs
+		AX      49      mjf             Major frame index
+		AY      50      evts            Number of events downlinked
+		AZ      51      lows            Number of anomalously low bias and pixel values
+		BA      52      inter-run       Kiloseconds since end of previous science run
+
+Output:
+
+        ./Working_dir/zdata_out:                 a new data part of the table.
+        $root_dir/$current_dir/data<year>:      the extracted table for this year.
+
+		data entires for this file are:
+			obs id
+			observation starting time
+			instrument (ACIS-I/ACIS-S)
+			# of CCDs used and configulation (I or S)
+			mode (Cc3x3, Te3x3 etc)
+			integration time (in K sec)
+			# of events
+			# of errors
+			# of dropped events
+			orgm	
+			grating (HTIG/LETG/NONE)
+			target name
+
+        $root_dir/$current_dir/te1_3_out        1x3 timed data table
+        $root_dir/$current_dir/te3_3_out        3x3 timed data table
+        $root_dir/$current_dir/te5_5_out        5x5 timed data table
+        $root_dir/$current_dir/te_raw_out       raw timed data table
+        $root_dir/$current_dir/te_hist_out      histogram timed data table
+        $root_dir/$current_dir/cc1_3_out        1x3 continuous data table
+        $root_dir/$current_dir/cc3_3_out        3x3 continuous data table
+        $root_dir/$current_dir/cc5_5_out        5x5 continuous data table
+        $root_dir/$current_dir/cc_raw_out       raw continuous data table
+        $root_dir/$current_dir/cc_hist_out      histogram continous data table
+
+        Note: out of these, we follow only te3x3, te5x5, te_raw, and cc3x3.
+
+	$root_dir/$current_dir/cc3_3_out.gift
+	$root_dir/$current_dir/te3_3_out.gift
+	$root_dir/$current_dir/te5_5_out.gift
+	$root_dir/$current_dir/te_raw_out.gift
+	
+	$root_dir/science_run.html			a main http page
+	$root_dir/$current_dir/science_run.html		supplemental amin http page (used for past record)
+	$root_dir/Long_term/science_run.html		a main http page for a long term plots
+	$root_dir/$current_dir/cc3_3.html
+	$root_dir/$current_dir/te3_3.html
+	$root_dir/$current_dir/te5_5.html
+	$root_dir/$current_dir/te_raw.html
+
+Note:
+	this script calls all following perl scripts.
+
+acis_sci_run_high_evnt3x3.perl
+-----------------------------
+	This script reads data<year> and selects out high count observations in 3x3 events.
+	If there is the high event observations, send out warning email.
+
+	criteria: mode: Te3x3 and events/1000 sec > 180.0
+
+Input:
+	$root_dir/$current_dir/data<year>
+
+Output:
+	$root_dir/$current_dir/high_event_<year>	
+		obsid   		OBSID
+		target                  Target name
+		start time      	Starting time
+		int time        	Integrated observation time
+		inst    		Instrument (ACIS-I or ACIS-S)
+		ccd             	# of CCDs used and which mode (I or S)
+		grat    		grating use (HETG/LETG/Node)
+		avg # of events/sec	Average # of events/sec for the observations
+
+
+acis_sci_run_high_evnt5x5.perl
+-----------------------------
+	This script reads data<year> and selects out high count observations in 5x5 events.
+	If there is the high event observations, send out  warning email.
+
+	criteria: mode: Te5x5 and events/1000 sec > 56.0
+
+Input:
+	$root_dir/$current_dir/data<year>
+
+Output:
+	$root_dir/$current_dir/high_event5x5_<year>
+		obsid   		OBSID
+		target                  Target name
+		start time      	Starting time
+		int time        	Integrated observation time
+		inst    		Instrument (ACIS-I or ACIS-S)
+		ccd             	# of CCDs used and which mode (I or S)
+		grat    		grating use (HETG/LETG/Node)
+		avg # of events/sec	Average # of events/sec for the observations
+
+
+acis_sci_run_te3x3.perl
+----------------------
+	This script reads data<year> and selected out high drop rates in 3x3 events.
+	If there is the high drop rate observations, send out  warning email.
+
+	criteria: mode Te3x3 and drop rate > 3.0
+
+Input:
+	$root_dir/$current_dir/data<year>
+
+Output:
+	$root_dir/$current_dir/drop_<year>
+		obsid   		OBSID
+		target                  Target name
+		start time      	Starting time
+		int time        	Integrated observation time
+		inst    		Instrument (ACIS-I or ACIS-S)
+		ccd             	# of CCDs used and which mode (I or S)
+		grat    		grating use (HETG/LETG/Node)
+		drop rate (%)		Drop rate in percentage
+
+acis_sci_run_te5x5.perl
+----------------------
+	This script reads data<year> and selected out high drop rates in 5x5 events.
+	If there is the high drop rate observations, send out  warning email.
+
+	criteria: mode Te5x5 and drop rate > 3.0
+
+Input:
+	$root_dir/$current_dir/data<year>
+
+Output:
+	$root_dir/$current_dir/drop_<year>
+		obsid   		OBSID
+		target                  Target name
+		start time      	Starting time
+		int time        	Integrated observation time
+		inst    		Instrument (ACIS-I or ACIS-S)
+		ccd             	# of CCDs used and which mode (I or S)
+		grat    		grating use (HETG/LETG/Node)
+		drop rate (%)		Drop rate in percentage
+
+acis_sci_run_err3x3.perl
+-----------------------
+	This script reads data<year> and selects out high error observations in 3x3 events.
+	If there is the high error observations, send out warning email.
+
+	criteria: mode: Te3x3 and errors/1000 sec > 1.0
+
+Input:
+	$root_dir/$current_dir/data<year>
+
+Output:
+	$root_dir/$current_dir/high_error_<year>
+		obsid   		OBSID
+		target                  Target name
+		start time      	Starting time
+		int time        	Integrated observation time
+		inst    		Instrument (ACIS-I or ACIS-S)
+		ccd             	# of CCDs used and which mode (I or S)
+		grat    		grating use (HETG/LETG/Node)
+		err/ksec		# of Error per k sec
+
+acis_sci_run_err5x5.perl
+-----------------------
+	This script reads data<year> and selects out high error observations in 5x5 events.
+	If there is the high error observations, send out warning email.
+
+	criteria: mode: Te3x3 and errors/1000 sec > 1.0
+
+Input:
+	$root_dir/$current_dir/data<year>
+
+Output:
+	$root_dir/$current_dir/high_error_<year>
+		obsid   		OBSID
+		target                  Target name
+		start time      	Starting time
+		int time        	Integrated observation time
+		inst    		Instrument (ACIS-I or ACIS-S)
+		ccd             	# of CCDs used and which mode (I or S)
+		grat    		grating use (HETG/LETG/Node)
+		err/ksec		# of Error per k sec
+
+
+acis_sci_run_plot.perl <data file>
+-----------------------------------
+	This script crates a ps plot for a given data
+
+Input:
+	<data file> 			take this as an argument
+					example: $root_dir/$current_dir/te3_3_out
+
+Output:
+	a post script file		pgplot.ps in computing directory
+
+
+acis_sci_run_print_html.perl
+-----------------------------
+	This script creates  several html pages.
+
+Input:
+	None
+
+Output:
+	$root_dir/science_run.html			a main http page
+	$root_dir/$current_dir/science_run.html		supplemental amin http page (used for past record)
+	$root_dir/Long_term/science_run.html		a main http page for a long term plots
+	$root_dir/$current_dir/cc3_3.html
+	$root_dir/$current_dir/te3_3.html
+	$root_dir/$current_dir/te5_5.html
+	$root_dir/$current_dir/te_raw.html
+
+acis_sci_runrm_dupl.perl <input file>
+-------------
+	This script removes duplicated line from <input file>
+
+Input:
+	<input file>
+
+Output:
+	<input file>
+
+
+acis_sci_run_plot_long_term.perl
+--------------------------------
+	This script is run independent for the acis_sci_run_get_data.perl, but read all data<year>
+	files from the past and create plots for the entire period.
+
+Input:
+	$root_dir/Year<year>/data<year>
+
+Output:
+
+	$root_dir/Long_term/cc3_3_out.gif
+	$root_dir/Long_term/te3_3_out.gif
+	$root_dir/Long_term/te5_5_out.gif
+	$root_dir/Long_term/te_raw_out.gif
+
+--------
+C script 
+--------
+pnmflip and ppmtogif are c scripts used to convert a ps file to a gif file
+Both of them are kept in /data/mta4/MTA/bin.

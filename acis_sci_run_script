@@ -1,0 +1,6 @@
+setascds
+perl /data/mta4/MTA/bin/acis_sci_run_get_data.perl
+perl /data/mta4/MTA/bin/acis_sci_run_plot_long_term.perl
+rm -rf ./Working_dir ./param
+
+
