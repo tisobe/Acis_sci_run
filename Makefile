@@ -7,6 +7,7 @@ include /data/mta4/MTA/include/Makefile.MTA
 
 BIN  = acis_sci_run_err3x3.perl acis_sci_run_err5x5.perl acis_sci_run_get_data.perl acis_sci_run_high_evnt3x3.perl acis_sci_run_high_evnt5x5.perl acis_sci_run_plot.perl acis_sci_run_plot_long_term.perl acis_sci_run_print_html.perl acis_sci_run_rm_dupl.perl acis_sci_run_script acis_sci_run_te3x3.perl acis_sci_run_te5x5.perl acis_sci_run_wrap_script
 DOC  = README
+DATA = col_list2004
 
 install:
 ifdef BIN
