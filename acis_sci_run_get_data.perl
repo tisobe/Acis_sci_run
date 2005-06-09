@@ -20,7 +20,6 @@ if($uyear < 1900) {
 #---------- set directries-------------
 
 $root_dir     = '/data/mta/www/mta_acis_sci_run/';	#--- acis sci run main directory
-$root_dir     = '/data/mta/www/mta_acis_sci_run_test/';	#--- acis sci run main directory
 
 $bin_dir      = '/data/mta4/MTA/bin/';			#--- a directory which holds scripts
 

@@ -43,7 +43,6 @@ if ($uyear == 1999) {
 #---------- set directries-------------
 
 $root_dir     = '/data/mta/www/mta_acis_sci_run/';      #--- acis sci run main directory
-$root_dir     = '/data/mta/www/mta_acis_sci_run_test/';      #--- acis sci run main directory
 
 $bin_dir      = '/data/mta4/MTA/bin/';                  #--- a directory which holds scripts
 
@@ -52,7 +51,6 @@ $bin_data_dir = '/data/mta4/MTA/data/Acis_sci_run';     #--- a directory which h
 $current_dir  = 'Year'."$uyear";                        #--- seting a current output directory
 
 $http_dir     = 'http://asc.harvard.edu/mta_days/mta_acis_sci_run/';
-$http_dir     = 'http://asc.harvard.edu/mta_days/mta_acis_sci_run_test/';
 #
 #############################################
 
