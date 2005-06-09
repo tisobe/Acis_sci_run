@@ -214,7 +214,6 @@ sub get_mit_data{
 	OUTER:
 	for($version = $first_phase; $version <= $last_phase; $version++){
 		$file = 'http://acis.mit.edu/asc/acisproc'."$version".'/acis'."$version".'.xs3';
-	print "$file\n";
 		system("/opt/local/bin/lynx -source $file > ./Working_dir/input_data"); 
 		system("cp ./Working_dir/input_data $root_dir/$current_dir/");
 		
