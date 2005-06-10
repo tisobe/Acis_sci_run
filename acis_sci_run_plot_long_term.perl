@@ -92,7 +92,14 @@ foreach $mode ('cc3_3', 'te3_3', 'te5_5', 'te_raw'){
 	}
 	
 	@ybin = @err_list;			#### error plot starts here
-	
+	$sum = 0;
+	$ycnt = 0;
+	foreach $ent (@ybin){
+		$sum += $ent;
+		$ycnt++;
+	}
+	$avg = $sum/$ycnt;
+	$ymax = 3.0 * $avg;
 	y_min_max();
 	
 	$yt_axis = "Errors/ksec";
