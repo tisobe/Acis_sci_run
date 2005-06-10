@@ -98,7 +98,7 @@ foreach $mode ('cc3_3', 'te3_3', 'te5_5', 'te_raw'){
 	$yt_axis = "Errors/ksec";
 	$title = 'Errors (Science Run)';
 	
-	if($ymax < $ymin){
+	if($ymax > $ymin){
 		plot_fig();
 	}
 	
