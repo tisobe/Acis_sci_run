@@ -54,6 +54,12 @@ foreach $mode ('cc3_3', 'te3_3', 'te5_5', 'te_raw'){
 			@col = split(/\s+/, $_);
 			@atemp = split(/:/,$col[1]);
 			$date = $atemp[0] + $atemp[1]/86400.0;
+			$dev = 365;
+			$chk = 4.0 * int(0.25 * $year);
+			if($chk == $year) {
+				$dev = 366;
+			}
+			$date = $year + $date/$dev;
 			if($col[6] > 0) {
 				$evt = $col[7]/$col[6]/1000.0;
 				$err = $col[8]/$col[6];
@@ -79,7 +85,7 @@ foreach $mode ('cc3_3', 'te3_3', 'te5_5', 'te_raw'){
 	
 	y_min_max();				# find min & max of y
 	
-	$xt_axis = 'Time (Day of Year)';
+	$xt_axis = 'Time (Year)';
 	$yt_axis = 'Events/sec';
 	$title = 'Events per Second (Science Run)';
 	if($file eq 'te_raw_out'){		# special case for te_raw
@@ -165,31 +171,9 @@ sub plot_fig {
 
 sub x_min_max {
 
-        @xtrim = ();
-        $subt = 0;
-        foreach $xent (@xbin) {
-
-                if($xent =~ /\d/) {
-                        push(@xtrim, $xent);
-                } else {
-                        $subt++;
-                }
-        }
-        @xtemp = sort { $a<=> $b }  @xtrim;
-        $xmin = $xtemp[0];
-
-        if($xmin < 0.0) {
-                $xmin = $xmin*1.02;
-        } else {
-                $xmin = $xmin*0.98;
-        }
-
-        $xmax = @xtemp[$count -1 -$subt];
-        if($xmax < 0.0) {
-                $xmax = $xmax*0.99;
-        }else{
-                $xmax = $xmax*1.02;
-        }
+	@xsorted = sort{$a<=>$b} @xbin;
+	$xmin = $xsorted[0];
+	$xmax = $xsorted[$count -1];
 }
 
 ########################################################
