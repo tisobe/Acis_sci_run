@@ -60,7 +60,8 @@ open(OUT, ">$root_dir/science_run.html");
 
 print OUT '<HTML>';
 
-print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000", background="./stars.jpg">',"\n";
+#print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000", background="./stars.jpg">',"\n";
+print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="yellow" VLINK="yellow" ALINK="yellow", background="./stars.jpg">',"\n";
 
 print OUT '<title> ACIS Science Run </title>',"\n";
 
@@ -177,7 +178,8 @@ open(OUT, ">$h_name");
 
 print OUT '<HTML>';
 
-print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000", background="./stars.jpg">',"\n";
+#print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000", background="./stars.jpg">',"\n";
+print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="yellow" VLINK="yellow" ALINK="yellow", background="./stars.jpg">',"\n";
 
 print OUT '<title> ACIS Science Run </title>',"\n";
 
@@ -282,7 +284,8 @@ open(OUT, ">$h_name");
 
 print OUT '<HTML>';
 
-print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000", background="./stars.jpg">',"\n";
+#print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000", background="./stars.jpg">',"\n";
+print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="yellow" VLINK="yellow" ALINK="yellow", background="./stars.jpg">',"\n";
 
 print OUT '<title> ACIS Science Run </title>',"\n";
 
@@ -379,7 +382,8 @@ close(OUT);
 
 	open(OUT,">$root_dir/$current_dir/te5_5.html");
 	print OUT '<HTML>';
-	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000">',"\n";
+#	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000">',"\n";
+	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="yellow" VLINK="yellow" ALINK="yellow">',"\n";
 	print OUT '<title> Te 5x5 mode </title>',"\n";
 	print OUT '<CENTER><H2>Te 5x5 mode</H2> </CENTER>',"\n";
 	print OUT '<CENTER><H2>Updated ';
@@ -400,7 +404,8 @@ close(OUT);
 
 	open(OUT,">$root_dir/$current_dir/te3_3.html");
 	print OUT '<HTML>';
-	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000">',"\n";
+#	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000">',"\n";
+	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="yellow" VLINK="yellow" ALINK="yellow">',"\n";
 	print OUT '<title> Te 3x3 mode </title>',"\n";
 	print OUT '<CENTER><H2>Te 3x3 mode</H2> </CENTER>',"\n";
 	print OUT '<CENTER><H2>Updated ';
@@ -421,7 +426,8 @@ close(OUT);
 
 	open(OUT,">$root_dir/$current_dir/te_raw.html");
 	print OUT '<HTML>';
-	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000">',"\n";
+#	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000">',"\n";
+	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="yellow" VLINK="yellow" ALINK="yellow">',"\n";
 	print OUT '<title> Te Raw mode </title>',"\n";
 	print OUT '<CENTER><H2>Te Raw mode</H2> </CENTER>',"\n";
 	print OUT '<CENTER><H2>Updated ';
@@ -442,7 +448,8 @@ close(OUT);
 
 	open(OUT,">$root_dir/$current_dir/cc3_3.html");
 	print OUT '<HTML>';
-	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000">',"\n";
+#	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000">',"\n";
+	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="yellow" VLINK="yellow" ALINK="yellow">',"\n";
 	print OUT '<title> Cc 3x3 mode </title>',"\n";
 	print OUT '<CENTER><H2>Cc 3x3 mode</H2> </CENTER>',"\n";
 	print OUT '<CENTER><H2>Updated ';
