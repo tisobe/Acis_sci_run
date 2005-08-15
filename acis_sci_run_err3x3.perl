@@ -139,7 +139,7 @@ for $ent (@new_list){
 #
 
 if($chk > 0){
-        open(OUT, '>../Working_dir/alart.tmp');
+        open(OUT, '>./Working_dir/alart.tmp');
 	print OUT "ACIS Science Run issued the following warning(s)\n\n";
         print OUT "The following observation has a high Te3x3 Error Rate in today's science run\n\n";
 	print OUT "obsid   target                  start time  int time        inst    ccd     grat    err/ksec    \n";
