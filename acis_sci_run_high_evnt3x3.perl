@@ -7,7 +7,7 @@
 #											#
 #	author: t. isobe (tisobe@cfa.harvard.edu)					#
 #											#
-#	last update: Jun 8, 2005							#
+#	last update: Aug 23, 2005							#
 #											#
 #########################################################################################
 
@@ -23,9 +23,9 @@ if($uyear < 1900) {
 
 $root_dir     = '/data/mta/www/mta_acis_sci_run/';      #--- acis sci run main directory
 
-$bin_dir      = '/data/mta4/MTA/bin/';                  #--- a directory which holds scripts
+$bin_dir      = '/data/mta/MTA/bin/';                  #--- a directory which holds scripts
 
-$bin_data_dir = '/data/mta4/MTA/data/Acis_sci_run';     #--- a directory which holds bin data
+$bin_data_dir = '/data/mta/MTA/data/Acis_sci_run';     #--- a directory which holds bin data
 
 $current_dir  = 'Year'."$uyear";                        #--- seting a current output directory
 #

@@ -10,7 +10,7 @@ use PGPLOT;
 #									#
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)			#
 #									#
-#	Jun 06, 2005: first version					#
+#	Aug 23, 2005: first version					#
 #									#
 #########################################################################
 
@@ -24,9 +24,9 @@ $last_year = $uyear - 1;
 
 $root_dir     = '/data/mta/www/mta_acis_sci_run/';      #--- acis sci run main directory
 
-$bin_dir      = '/data/mta4/MTA/bin/';                  #--- a directory which holds scripts
+$bin_dir      = '/data/mta/MTA/bin/';                  #--- a directory which holds scripts
 
-$bin_data_dir = '/data/mta4/MTA/data/Acis_sci_run';     #--- a directory which holds bin data
+$bin_data_dir = '/data/mta/MTA/data/Acis_sci_run';     #--- a directory which holds bin data
 
 $current_dir  = 'Year'."$uyear";                        #--- seting a current output directory
 #
@@ -131,7 +131,7 @@ foreach $mode ('cc3_3', 'te3_3', 'te5_5', 'te_raw'){
 
 	$out_name = "$root_dir".'Long_term/long_term_'."$mode".'.gif';
 
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./pgplot.ps|/data/mta4/MTA/bin/pnmflip -r270 |/data/mta4/MTA/bin/ppmtogif > $out_name");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./pgplot.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_name");
 	system("rm pgplot.ps");
 }
 

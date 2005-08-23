@@ -5,7 +5,7 @@
 #	acis_sci_run_get_data.perl: obtain data from MIT and plot acis science run	#
 #											#
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)					#
-#	Last update: Mar 21, 2005							#
+#	Last update: Aug 23, 2005							#
 #											#
 #########################################################################################
 
@@ -21,9 +21,9 @@ if($uyear < 1900) {
 
 $root_dir     = '/data/mta/www/mta_acis_sci_run/';	#--- acis sci run main directory
 
-$bin_dir      = '/data/mta4/MTA/bin/';			#--- a directory which holds scripts
+$bin_dir      = '/data/mta/MTA/bin/';			#--- a directory which holds scripts
 
-$bin_data_dir = '/data/mta4/MTA/data/Acis_sci_run';	#--- a directory which holds bin data
+$bin_data_dir = '/data/mta/MTA/data/Acis_sci_run';	#--- a directory which holds bin data
 
 $current_dir  = 'Year'."$uyear";			#--- seting a current output directory
 #
@@ -466,13 +466,13 @@ sub plot_script{
 #
 ### change ps file to gif file
 #
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|/data/mta4/MTA/bin/pnmflip -r270 |/data/mta4/MTA/bin/ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
 
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te3_3_out.ps|/data/mta4/MTA/bin/pnmflip -r270 |/data/mta4/MTA/bin/ppmtogif > $root_dir/$current_dir/te3_3_out.gif");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te3_3_out.gif");
 
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te5_5_out.ps|/data/mta4/MTA/bin/pnmflip -r270 |/data/mta4/MTA/bin/ppmtogif > $root_dir/$current_dir/te5_5_out.gif");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te5_5_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te5_5_out.gif");
 
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te_raw_out.ps|/data/mta4/MTA/bin/pnmflip -r270 |/data/mta4/MTA/bin/ppmtogif > $root_dir/$current_dir/te_raw_out.gif");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te_raw_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te_raw_out.gif");
 
 #	system("rm ./Working_dir/*ps");
 }
