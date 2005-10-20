@@ -154,7 +154,7 @@ if($chk > 0){
 	print OUT "\n",' or MIT ACIS Site: http://acis.mit.edu/asc/',"\n";
         close(OUT);
 
-        system("cat ./Working_dir/alart.tmp |mailx -s \"Subject: ACIS Science Run Alert<>High Te5x5 Error Rate\n\" -r  isobe\@head-cfa.harvard.edu -c isobe\@head-cfa.harvard.edu swolk\@head.cfa.harvard.edu cus\@head.cfa.harvard.edu");
+        system("cat ./Working_dir/alart.tmp |mailx -s \"Subject: ACIS Science Run Alert<>High Te5x5 Error Rate\n\" -r  isobe\@head-cfa.harvard.edu -c isobe\@head-cfa.harvard.edu swolk\@head.cfa.harvard.edu ");
 ###        system("cat ./Working_dir/alart.tmp |mailx -s \"Subject: High Te5x5 Error Rate---Test\n\" -r  isobe\@head-cfa.harvard.edu  isobe\@head-cfa.harvard.edu ");
 }
 
