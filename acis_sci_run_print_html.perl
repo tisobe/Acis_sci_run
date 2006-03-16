@@ -6,7 +6,7 @@
 #										#
 #	Author:	Takashi Isobe (tisobe@cfa.harvard.edu)				#
 #										#
-#	Aug 23, 2005:	Last update  						#
+#	Jan 03, 2006:	Last update  						#
 #										#
 #################################################################################
 
@@ -38,6 +38,11 @@ if ($uyear == 1999) {
                 $dom++;
         }
 }
+
+#
+#--- fix so that the month day start from 1 not from 0
+#
+$uyday++;
 
 #############################################
 #---------- set directries-------------
@@ -71,8 +76,7 @@ print OUT '<CENTER><H2>Updated ';
 print OUT "$uyear-$month-$umday  ";
 print OUT "\n";
 print OUT "<br>";
-$disp_day = $uyday + 1;
-print OUT "DAY OF YEAR: $disp_day";
+print OUT "DAY OF YEAR: $uyday";
 print OUT "\n";
 print OUT "<br>";
 print OUT "DAY OF MISSION: $dom ";

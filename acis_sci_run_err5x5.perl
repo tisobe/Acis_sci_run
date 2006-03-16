@@ -86,7 +86,7 @@ while(<FH>){
 			}
 
                         print OUT "$atemp[0]\t$atemp[11]\t$atemp[1]\t$atemp[6]\t\t$atemp[2]\t$atemp[3]\t$atemp[10]\t$ratio\n";
-                        $line = "$atemp[0]\t$atemp[11]\t$atemp[1]\$atemp[6]\t\tt$atemp[2]\t$atemp[3]\t$atemp[10]\t$ratio";
+                        $line = "$atemp[0]\t$atemp[11]\t$atemp[1]\t$atemp[6]\t\t$atemp[2]\t$atemp[3]\t$atemp[10]\t$ratio";
                         push(@new_list, $line);
 		}
 	}
