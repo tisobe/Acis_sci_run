@@ -151,7 +151,7 @@ if($chk > 0){
 	print OUT "\n",' Plese check: http://asc.harvard.edu/mta_days/mta_acis_sci_run/science_run.html',"\n";
 	print OUT "\n",' or MIT ACIS Site: http://acis.mit.edu/asc/',"\n";
         close(OUT);
-        system("cat ./Working_dir/alart.tmp |mailx -s \"Subject: ACIS Science Run Alert<> High Te5x5 Event Rate\n\" -r  isobe\@head-cfa.harvard.edu -c isobe\@head-cfa.harvard.edu swolk\@head.cfa.harvard.edu ");
+        system("cat ./Working_dir/alart.tmp |mailx -s \"Subject: ACIS Science Run Alert<> High Te5x5 Event Rate\n\" -r  isobe\@head-cfa.harvard.edu -c isobe\@head-cfa.harvard.edu swolk\@head.cfa.harvard.edu brad\@head.cfa.harvard.edu");
 ###        system("cat ./Working_dir/alart.tmp |mailx -s \"Subject: High Te5x5 Event Rate---Test\n\" -r  isobe\@head-cfa.harvard.edu isobe\@head-cfa.harvard.edu ");
 }
 
