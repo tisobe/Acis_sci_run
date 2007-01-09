@@ -5,7 +5,7 @@
 #	acis_sci_run_get_data.perl: obtain data from MIT and plot acis science run	#
 #											#
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)					#
-#	Last update: Aug 23, 2005							#
+#	Last update: Jan 09, 2007							#
 #											#
 #########################################################################################
 
@@ -17,7 +17,9 @@ if($uyear < 1900) {
 }
 
 #############################################
+#
 #---------- set directries-------------
+#
 
 $root_dir     = '/data/mta/www/mta_acis_sci_run/';	#--- acis sci run main directory
 
@@ -41,9 +43,50 @@ if($list =~ /param/){
 }
 system("mkdir ./param");
 
-get_mit_data();						##### obtain data from MIT
+#
+#---- check whether this year's directory exists
+#
 
-open(FH, './Working_dir/zdata_out');			####  new data obtained from MIT data
+$test_in = `ls -d $root_dir/Year*`;
+@chk_dir = split(/\s+/, $test_in);
+$chk_new = 1;
+OUTER:
+foreach $ent (@chk_dir){
+	if($ent =~ /$current_dir/){
+		$chk_new = 0;
+		last OUTER;
+	}
+}
+
+#
+#---- if this is the first of the year, analyze data in the
+#---- last year's frame
+#
+
+if($chk_new == 1){
+	$lyear       = $uyear -1;
+	$save_name   = $current_dir;
+	$current_dir = 'Year'."$lyear";
+}
+
+#
+#---- obtain data from MIT
+#
+
+get_mit_data();
+
+#
+#---- reset to the this year's data directory
+#
+if($chk_new == 1){
+	$current_dir = $save_name;
+}
+
+#
+#---- zdata_out contains data obtained from MIT data
+#
+
+open(FH, './Working_dir/zdata_out');
 @data = ();
 $cnt = 0;
 $chk = 0;
@@ -52,8 +95,12 @@ while(<FH>){
 	chomp $_;
 	@atemp = split(/\s+/, $_);
 	@btemp = split(/:/, $atemp[1]);
-	if($btemp[0] == 1 && $chk == 0){		#### check whether data are from a new year
-		$chk++;					#### if it is "1", it means Jan 1 of the year
+#
+#---- check whether data are from a new year
+#---- if it is "1", it means Jan 1 of the year
+#
+	if($btemp[0] == 1 && $chk == 0){
+		$chk++;		
 		$ind = $cnt;
 	}
 	push(@data, $_);
@@ -63,14 +110,20 @@ close(FH);
 
 if($chk > 0){
 #
-### for the case the year changed
+#--- for the case the year changed
 #
-### here is the last year's data
+#--- here is the last year's data
 #
 	$last_year = $uyear - 1;
 	open(OUT, '>./Working_dir/adding_data');
-	for($i = 0; $i < $ind; $i++){
-		print OUT "data[$i]\n";
+	for($i = 0; $i < $cnt; $i++){
+#
+#---- probably the end of the year data has date > 300
+#
+		@atemp = split(/\s+/, $data[$i]);
+		if($atemp[1] > 300){			
+			print OUT "$data[$i]\n";
+		}
 	}
 	close(OUT);
 	$name = "$root_dir".'/Year'."$last_year".'/data'."$last_year";
@@ -79,18 +132,44 @@ if($chk > 0){
 	system("perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
 
 	$file = $name;
-	separate_data();	##### sub to separate data depending on mode
-	$print_ind = 'yes';	##### make different header for the main html page
-	plot_script();		##### sub to plot figures
+#
+#--- sub to separate data depending on mode
+#
+	separate_data();
+#
+#--- make different header for the main html page
+#
+	$print_ind = 'yes';
+#
+#---- only when the new year directory is created, check the
+#---- last year's plotting (one last time)
+#
+	if($chk_new == 1){
+		$lyear       = $uyear -1;
+		$save_name   = $current_dir;
+		$current_dir = 'Year'."$lyear";
+#
+#---- sub to plot figures (and send out warning)
+#
+		plot_script();
+	}
 
 #
-### here is the new year's data
+#---- here is the new year's data
 #
-	system("mkdir $root_dir/$current_dir");
+	if($chk_new == 1){
+		system("mkdir $root_dir/$current_dir");
+	}
 	$name = "$root_dir/$current_dir".'/data'."$uyear";
-	open(OUT, ">./$name");
-	for($i = $ind; $i < $cnt; $i++){
-		print OUT "$data[$i]\n";
+	open(OUT, ">$name");
+	for($i = 0; $i < $cnt; $i++){
+#
+#---- probably the first part of the year data has date < 100
+#
+		@atemp = split(/\s+/, $data[$i]);
+		if($atemp[1] < 100){
+			print OUT "$data[$i]\n";
+		}
 	}
 	close(OUT);
 	system("perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
@@ -100,8 +179,9 @@ if($chk > 0){
 	$print_ind = 'no';
 	plot_script();
 }else{
+
 #
-### there is no change of year; business as usual
+#--- there is no change of year; business as usual
 #
 	$name = "$root_dir/$current_dir".'/data'."$uyear";
 	system("cat ./Working_dir/zdata_out >> $name");
@@ -178,7 +258,10 @@ sub separate_data{
 sub get_mit_data{
 	system("mv $root_dir/$current_dir/input_data  $root_dir/$current_dir/input_data~");
 	
-	open(FH, "$root_dir/$current_dir/input_data~");		#### read the past data list
+#
+#---- read the past data list
+#
+	open(FH, "$root_dir/$current_dir/input_data~");
 	@old_data = ();
 	while(<FH>){
 		chomp $_;
@@ -187,8 +270,8 @@ sub get_mit_data{
 	close(FH);
 	
 #
-### first find out the latest version of phase by reading main html page 
-### here is the lnyx script to obtain web page data
+#--- first find out the latest version of phase by reading main html page 
+#--- here is the lnyx script to obtain web page data
 #
 		system("/opt/local/bin/lynx -source http://acis.mit.edu/asc/ >./Working_dir/phase_check");
 		system("cat ./Working_dir/phase_check|grep Phase > ./Working_dir/phase_check2");
@@ -217,7 +300,7 @@ sub get_mit_data{
 		system("cp ./Working_dir/input_data $root_dir/$current_dir/");
 		
 #
-#### extract new part of data
+#--- extract new part of data
 #
 		open(FH, "./Working_dir/input_data");
 		@checkdata = ();
@@ -235,21 +318,32 @@ sub get_mit_data{
 			$cnt++;
 		}
 		close(FH);
-		@new_data = @checkdata;	       			#### if it pass the test, we proceed
+#
+#---- if it pass the test, we proceed
+#
+		@new_data = @checkdata;
 	}
+#
+#---- list of columns to extract
+#	
+	$col_names = "$bin_data_dir".'/col_list2004';
 	
-	$col_names = "$bin_data_dir".'/col_list2004';		##### list of columns to extract
-	
+#
+#---- col_list: column list
+#
 	$col_list = ();
 	open(FH, "$col_names");
 	while(<FH>){
 		chomp $_;
 		$upper = uc ($_);
-		push(@col_list, $upper);	#### column list
+		push(@col_list, $upper);
 	}
 	close(FH);
 	
-	for($i = 0; $i < 400; $i++){		### set a hash table
+	for($i = 0; $i < 400; $i++){
+#
+#---- set a hash table
+#
 		%{data.$i}= (A =>[""],
 		     	B =>[""],
 		     	C =>[""],
@@ -309,7 +403,10 @@ sub get_mit_data{
 	@seq_list = ();
 	foreach $indata (@new_data){
 		@atemp = split(//, $indata);
-		if($atemp[0] eq 'C'){			# if the line starts from C, it contains the data
+#
+#---- if the line starts from C, it contains the data
+#
+		if($atemp[0] eq 'C'){
 			@btemp = split(/\@/, $indata);
 			@ctemp = split(/\:/, $btemp[1]);
 			@dtemp = split(//, $ctemp[0]);
@@ -320,11 +417,17 @@ sub get_mit_data{
 				if($ent =~/\d/){
 					$seq = "$seq"."$ent";
 				}else{
-					$pos_id = "$pos_id"."$ent";	#this is A... BA
+#
+#--- $pos_id: entry position id: A .... BA
+#
+					$pos_id = "$pos_id"."$ent";
 				}
 			}
 			@etemp = split(/=/, $ctemp[2]);
-			if($pos_id eq 'I' || $pos_id eq 'J'){	#### time entries need a special care
+#
+#--- time entries need a special care
+#
+			if($pos_id eq 'I' || $pos_id eq 'J'){
 				@gtemp = split(/\"/, $indata);
 				$value = $gtemp[1];
 			}else{
@@ -335,20 +438,26 @@ sub get_mit_data{
 					$value = $etemp[1];
 				}
 			}
-			${data.$seq}{$pos_id }[0] = $value;		# hash table of the data
+#
+#---- hash table of the data
+#
+			${data.$seq}{$pos_id }[0] = $value;
 			push(@seq_list,$seq);
 		}
 	}
 	close(FH);
 #
-### find how many data the file has
+#--- find how many data the file has
 #
 		@temp = sort{$a<=>$b}@seq_list;
 		$cnt = 0;
 		foreach(@temp){
 			$cnt++;
-		}
-		$max = @temp[$cnt -1];		#---- drop the last one since it is usually on process.
+		}		
+#
+#--- drop the last one since it is usually on process.
+#
+		$max = @temp[$cnt -1];
 		$max--;
 	
 	@new_data_save = ();
@@ -435,7 +544,10 @@ sub get_mit_data{
 ########################################################################
 
 sub plot_script{
-	system("perl $bin_dir/acis_sci_run_print_html.perl $print_ind");	#### print html pages
+#
+#---- print html pages
+#
+	system("perl $bin_dir/acis_sci_run_print_html.perl $print_ind");
 
 #
 #---- calling plotting script
@@ -454,17 +566,19 @@ sub plot_script{
 
 
 #
-### find data exceeding warning level
+#--- find data exceeding warning level
 #
-	system("perl $bin_dir/acis_sci_run_te3x3.perl      	$name");
-	system("perl $bin_dir/acis_sci_run_te5x5.perl      	$name");
-	system("perl $bin_dir/acis_sci_run_err3x3.perl     	$name");
-	system("perl $bin_dir/acis_sci_run_err5x5.perl     	$name");
-	system("perl $bin_dir/acis_sci_run_high_evnt3x3.perl    $name");
-	system("perl $bin_dir/acis_sci_run_high_evnt5x5.perl    $name");
+	if($chk_new == 0){
+		system("perl $bin_dir/acis_sci_run_te3x3.perl      	");
+		system("perl $bin_dir/acis_sci_run_te5x5.perl      	");
+		system("perl $bin_dir/acis_sci_run_err3x3.perl     	");
+		system("perl $bin_dir/acis_sci_run_err5x5.perl     	");
+		system("perl $bin_dir/acis_sci_run_high_evnt3x3.perl    ");
+		system("perl $bin_dir/acis_sci_run_high_evnt5x5.perl    ");
+	}
 
 #
-### change ps file to gif file
+#--- change ps file to gif file
 #
 	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
 

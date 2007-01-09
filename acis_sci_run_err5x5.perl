@@ -48,7 +48,6 @@ while(<FH>){
         }
 }
 close(FH);
-$input = $ARGV[0];
 
 @new_list = ();
 open(FH, "$input");						#------ read data in
