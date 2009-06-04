@@ -5,7 +5,7 @@
 #	acis_sci_run_get_data.perl: obtain data from MIT and plot acis science run	#
 #											#
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)					#
-#	Last update: Jan 09, 2007							#
+#	Last update: Jun 04.2097							#
 #											#
 #########################################################################################
 
@@ -129,7 +129,7 @@ if($chk > 0){
 	$name = "$root_dir".'/Year'."$last_year".'/data'."$last_year";
 	system("cat ./Working_dir/adding_data >> $name");
 	system("rm  ./Working_dir/adding_data");
-	system("perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
+	system("/opt/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
 
 	$file = $name;
 #
@@ -172,7 +172,7 @@ if($chk > 0){
 		}
 	}
 	close(OUT);
-	system("perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
+	system("/opt/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
 
 	$file = $name;
 	separate_data();
@@ -185,7 +185,7 @@ if($chk > 0){
 #
 	$name = "$root_dir/$current_dir".'/data'."$uyear";
 	system("cat ./Working_dir/zdata_out >> $name");
-	system("perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
+	system("/opt/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
 
 	$file = $name;
 	separate_data();
@@ -547,21 +547,21 @@ sub plot_script{
 #
 #---- print html pages
 #
-	system("perl $bin_dir/acis_sci_run_print_html.perl $print_ind");
+	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_print_html.perl $print_ind");
 
 #
 #---- calling plotting script
 #
-	system("perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/cc3_3_out");	
+	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/cc3_3_out");	
 	system("mv pgplot.ps ./Working_dir/cc3_3_out.ps");
 
-	system("perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te3_3_out");
+	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te3_3_out");
 	system("mv pgplot.ps ./Working_dir/te3_3_out.ps");
 
-	system("perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te5_5_out");
+	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te5_5_out");
 	system("mv pgplot.ps ./Working_dir/te5_5_out.ps");
 
-	system("perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te_raw_out");
+	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te_raw_out");
 	system("mv pgplot.ps ./Working_dir/te_raw_out.ps");
 
 
@@ -569,12 +569,12 @@ sub plot_script{
 #--- find data exceeding warning level
 #
 	if($chk_new == 0){
-		system("perl $bin_dir/acis_sci_run_te3x3.perl      	");
-		system("perl $bin_dir/acis_sci_run_te5x5.perl      	");
-		system("perl $bin_dir/acis_sci_run_err3x3.perl     	");
-		system("perl $bin_dir/acis_sci_run_err5x5.perl     	");
-		system("perl $bin_dir/acis_sci_run_high_evnt3x3.perl    ");
-		system("perl $bin_dir/acis_sci_run_high_evnt5x5.perl    ");
+		system("/opt/local/bin/perl $bin_dir/acis_sci_run_te3x3.perl      	");
+		system("/opt/local/bin/perl $bin_dir/acis_sci_run_te5x5.perl      	");
+		system("/opt/local/bin/perl $bin_dir/acis_sci_run_err3x3.perl     	");
+		system("/opt/local/bin/perl $bin_dir/acis_sci_run_err5x5.perl     	");
+		system("/opt/local/bin/perl $bin_dir/acis_sci_run_high_evnt3x3.perl    ");
+		system("/opt/local/bin/perl $bin_dir/acis_sci_run_high_evnt5x5.perl    ");
 	}
 
 #
