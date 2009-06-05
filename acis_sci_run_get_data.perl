@@ -547,21 +547,21 @@ sub plot_script{
 #
 #---- print html pages
 #
-	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_print_html.perl $print_ind");
+	system("/opt/local/bin/perl $bin_dir/acis_sci_run_print_html.perl $print_ind");
 
 #
 #---- calling plotting script
 #
-	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/cc3_3_out");	
+	system("/opt/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/cc3_3_out");	
 	system("mv pgplot.ps ./Working_dir/cc3_3_out.ps");
 
-	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te3_3_out");
+	system("/opt/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te3_3_out");
 	system("mv pgplot.ps ./Working_dir/te3_3_out.ps");
 
-	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te5_5_out");
+	system("/opt/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te5_5_out");
 	system("mv pgplot.ps ./Working_dir/te5_5_out.ps");
 
-	system("/opt/loca/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te_raw_out");
+	system("/opt/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te_raw_out");
 	system("mv pgplot.ps ./Working_dir/te_raw_out.ps");
 
 
