@@ -5,7 +5,7 @@
 #	acis_sci_run_get_data.perl: obtain data from MIT and plot acis science run	#
 #											#
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)					#
-#	Last update: Jun 04.2097							#
+#	Last update: Jul 15,  2009							#
 #											#
 #########################################################################################
 
@@ -580,13 +580,13 @@ sub plot_script{
 #
 #--- change ps file to gif file
 #
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
+	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
 
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te3_3_out.gif");
+	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te3_3_out.gif");
 
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te5_5_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te5_5_out.gif");
+	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te5_5_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te5_5_out.gif");
 
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te_raw_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te_raw_out.gif");
+	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te_raw_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te_raw_out.gif");
 
 #	system("rm ./Working_dir/*ps");
 }

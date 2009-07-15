@@ -1,4 +1,14 @@
-setascds
+source /home/mta/.ascrc
+
+rm -rf param
+mkdir param
+
+source /home/mta/bin/reset_param
+
+setenv PFILES "${PDIRS}" 
+set path = (/home/ascds/DS.release/bin/  $path)
+set path = (/home/ascds/DS.release/ots/bin/ $path)
+
 /opt/local/bin/perl /data/mta/MTA/bin/acis_sci_run_get_data.perl
 /opt/local/bin/perl /data/mta/MTA/bin/acis_sci_run_plot_long_term.perl
 rm -rf ./Working_dir ./param

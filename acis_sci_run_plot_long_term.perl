@@ -11,6 +11,7 @@ use PGPLOT;
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)			#
 #									#
 #	Aug 23, 2005: first version					#
+#	Last update: 	Jul 15, 2009					#
 #									#
 #########################################################################
 
@@ -131,7 +132,7 @@ foreach $mode ('cc3_3', 'te3_3', 'te5_5', 'te_raw'){
 
 	$out_name = "$root_dir".'Long_term/long_term_'."$mode".'.gif';
 
-	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./pgplot.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_name");
+	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./pgplot.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_name");
 	system("rm pgplot.ps");
 }
 
