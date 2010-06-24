@@ -84,7 +84,7 @@ print OUT "                } \n";
 print OUT "        </script> \n";
 print OUT " \n";
 print OUT "</head> \n";
-print OUT "<body  style='background-image:url(\"/data/mta_www/mta_aiming/stars.jpg\")'> \n";
+print OUT "<body  style='background-image:url(\"http://asc.harvard.edu/mta_days/mta_aiming/stars.jpg\")'> \n";
 
 
 print OUT '<h2 style="text-align:center">ACIS Science Run</h2>',"\n";
@@ -236,7 +236,7 @@ print OUT "                } \n";
 print OUT "        </script> \n";
 print OUT " \n";
 print OUT "</head> \n";
-print OUT "<body> \n";
+print OUT "<body style='background-image:url(\"http://asc.harvard.edu/mta_days/mta_aiming/stars.jpg\")'> \n";
 
 
 print OUT '<h2 style="text-align:center">ACIS Science Run: Year', " $uyear", '</h2>',"\n";
@@ -362,7 +362,7 @@ print OUT "                } \n";
 print OUT "        </script> \n";
 print OUT " \n";
 print OUT "</head> \n";
-print OUT "<body> \n";
+print OUT "<body style='background-image:url(\"http://asc.harvard.edu/mta_days/mta_aiming/stars.jpg\")'> \n";
 
 
 print OUT '<h2 style="text-align:center">ACIS Science Run: Entire Period</h2>',"\n";
