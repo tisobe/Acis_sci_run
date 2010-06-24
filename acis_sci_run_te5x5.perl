@@ -122,7 +122,7 @@ OUTER:
 for $ent (@new_list){
 	@ntemp = split(/\s+/, $ent);
         for $comp (@old_list){
-		@otemp = split(/\S+/, $comp);
+		@otemp = split(/\s+/, $comp);
                 if($ent eq $comp || $ntemp[0] == $otemp[0]){ 
                         next OUTER;
                 }
