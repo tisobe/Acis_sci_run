@@ -6,7 +6,7 @@
 #											#
 #	Author:	Takashi Isobe (tisobe@cfa.harvard.edu)					#
 #											#
-#	Last Update: Jun 24, 2010  							#
+#	Last Update: Sep 20, 2010  							#
 #											#
 #########################################################################################
 
@@ -35,6 +35,12 @@ if ($uyear == 1999) {
                 $dom++;
         }
         if($uyear > 2012) {
+                $dom++;
+        }
+        if($uyear > 2016) {
+                $dom++;
+        }
+        if($uyear > 2020) {
                 $dom++;
         }
 }
@@ -129,7 +135,8 @@ print OUT '<tr>',"\n";
 print OUT '<th>This Year</th>',"\n";
 print OUT "<td><a href=\"javascript:WindowOpener('Year$uyear/te3_3_out.gif')\"> TE 3X3 </a></td> \n";
 print OUT "<td><a href=\"javascript:WindowOpener('Year$uyear/te5_5_out.gif')\"> TE 5X5 </a></td> \n";
-print OUT "<td><a href=\"javascript:WindowOpener('Year$uyear/te_raw_out.gif')\"> TE Raw </a></td> \n";
+#print OUT "<td><a href=\"javascript:WindowOpener('Year$uyear/te_raw_out.gif')\"> TE Raw </a></td> \n";
+print OUT "<td>  --- </td> \n";
 print OUT "<td><a href=\"javascript:WindowOpener('Year$uyear/cc3_3_out.gif')\"> CC 3X3 </a></td> \n";
 print OUT '</tr>',"\n";
 print OUT '<th>Entire Period</th>',"\n";
