@@ -5,7 +5,7 @@
 #	acis_sci_run_get_data.perl: obtain data from MIT and plot acis science run	#
 #											#
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)					#
-#	Last update: Jul 15,  2009							#
+#	Last update: Jan 04,  2011							#
 #											#
 #########################################################################################
 
@@ -158,6 +158,7 @@ if($chk > 0){
 #---- here is the new year's data
 #
 	if($chk_new == 1){
+		$current_dir = 'Year'."$uyear";
 		system("mkdir $root_dir/$current_dir");
 	}
 	$name = "$root_dir/$current_dir".'/data'."$uyear";
