@@ -13,5 +13,5 @@ set path = (/home/ascds/DS.release/ots/bin/ $path)
 /opt/local/bin/perl /data/mta/MTA/bin/acis_sci_run_plot_long_term.perl
 rm -rf ./Working_dir ./param
 
-chgrp mtagroup /data/mta_www/mta_acis_sci_run/* /data/mta_www/mta_acis_sci_run/*/*
+chgrp mtagroup /data/mta_www/mta_acis_sci_run/* /data/mta_www/mta_acis_sci_run/Year*/*
 
