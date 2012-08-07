@@ -1,11 +1,11 @@
-#!/usr/bin/perl
+#!/usr/local/bin/perl
 
 #########################################################################################
 #											#
 #	acis_sci_run_get_data.perl: obtain data from MIT and plot acis science run	#
 #											#
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)					#
-#	Last update: Jan 04,  2011							#
+#	Last update: Jul 23,  2012							#
 #											#
 #########################################################################################
 
@@ -21,13 +21,30 @@ if($uyear < 1900) {
 #---------- set directries-------------
 #
 
-$root_dir     = '/data/mta/www/mta_acis_sci_run/';	#--- acis sci run main directory
-
-$bin_dir      = '/data/mta/MTA/bin/';			#--- a directory which holds scripts
-
-$bin_data_dir = '/data/mta/MTA/data/Acis_sci_run';	#--- a directory which holds bin data
+$dir_list = '/data/mta/Script/ACIS/Acis_sci_run/house_keeping/dir_list';
+open(FH, $dir_list);
+while(<FH>){
+    chomp $_;
+    @atemp = split(/\s+/, $_);
+    ${$atemp[0]} = $atemp[1];
+}
+close(FH);
 
 $current_dir  = 'Year'."$uyear";			#--- seting a current output directory
+#
+#--- setting a directory path to ppmtogif
+#
+
+$host = `hostname`;
+chomp $host;
+if($host eq 'rhodes' || host eq 'colossus'){
+        $ppm_dir  = "/home/ascds/DS.release/ots/bin/";
+        $lynx_dir = "/usr/local/bin/";
+}else{
+        $ppm_dir  = '/usr/bin/';
+        $lynx_dir = '/usr/bin/';
+}
+
 #
 #############################################
 
@@ -129,7 +146,7 @@ if($chk > 0){
 	$name = "$root_dir".'/Year'."$last_year".'/data'."$last_year";
 	system("cat ./Working_dir/adding_data >> $name");
 	system("rm  ./Working_dir/adding_data");
-	system("/opt/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
+	system("/usr/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
 
 	$file = $name;
 #
@@ -173,7 +190,7 @@ if($chk > 0){
 		}
 	}
 	close(OUT);
-	system("/opt/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
+	system("/usr/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
 
 	$file = $name;
 	separate_data();
@@ -186,7 +203,7 @@ if($chk > 0){
 #
 	$name = "$root_dir/$current_dir".'/data'."$uyear";
 	system("cat ./Working_dir/zdata_out >> $name");
-	system("/opt/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
+	system("/usr/local/bin/perl $bin_dir/acis_sci_run_rm_dupl.perl $name");
 
 	$file = $name;
 	separate_data();
@@ -274,7 +291,7 @@ sub get_mit_data{
 #--- first find out the latest version of phase by reading main html page 
 #--- here is the lnyx script to obtain web page data
 #
-		system("/opt/local/bin/lynx -source http://acis.mit.edu/asc/ >./Working_dir/phase_check");
+		system("$lynx_dir/lynx -source http://acis.mit.edu/asc/ >./Working_dir/phase_check");
 		system("cat ./Working_dir/phase_check|grep Phase > ./Working_dir/phase_check2");
 		open(IN, './Working_dir/phase_check2');
 		@phase_list = ();
@@ -297,7 +314,7 @@ sub get_mit_data{
 	OUTER:
 	for($version = $first_phase; $version <= $last_phase; $version++){
 		$file = 'http://acis.mit.edu/asc/acisproc'."$version".'/acis'."$version".'.xs3';
-		system("/opt/local/bin/lynx -source $file > ./Working_dir/input_data"); 
+		system("$lynx_dir/lynx -source $file > ./Working_dir/input_data"); 
 		system("cp ./Working_dir/input_data $root_dir/$current_dir/");
 		
 #
@@ -548,21 +565,21 @@ sub plot_script{
 #
 #---- print html pages
 #
-	system("/opt/local/bin/perl $bin_dir/acis_sci_run_print_html.perl $print_ind");
+	system("/usr/local/bin/perl $bin_dir/acis_sci_run_print_html.perl $print_ind");
 
 #
 #---- calling plotting script
 #
-	system("/opt/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/cc3_3_out");	
+	system("/usr/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/cc3_3_out");	
 	system("mv pgplot.ps ./Working_dir/cc3_3_out.ps");
 
-	system("/opt/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te3_3_out");
+	system("/usr/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te3_3_out");
 	system("mv pgplot.ps ./Working_dir/te3_3_out.ps");
 
-	system("/opt/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te5_5_out");
+	system("/usr/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te5_5_out");
 	system("mv pgplot.ps ./Working_dir/te5_5_out.ps");
 
-	system("/opt/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te_raw_out");
+	system("/usr/local/bin/perl $bin_dir/acis_sci_run_plot.perl $root_dir/$current_dir/te_raw_out");
 	system("mv pgplot.ps ./Working_dir/te_raw_out.ps");
 
 
@@ -570,24 +587,24 @@ sub plot_script{
 #--- find data exceeding warning level
 #
 	if($chk_new == 0){
-		system("/opt/local/bin/perl $bin_dir/acis_sci_run_te3x3.perl      	");
-		system("/opt/local/bin/perl $bin_dir/acis_sci_run_te5x5.perl      	");
-		system("/opt/local/bin/perl $bin_dir/acis_sci_run_err3x3.perl     	");
-		system("/opt/local/bin/perl $bin_dir/acis_sci_run_err5x5.perl     	");
-		system("/opt/local/bin/perl $bin_dir/acis_sci_run_high_evnt3x3.perl    ");
-		system("/opt/local/bin/perl $bin_dir/acis_sci_run_high_evnt5x5.perl    ");
+		system("/usr/local/bin/perl $bin_dir/acis_sci_run_te3x3.perl      	");
+		system("/usr/local/bin/perl $bin_dir/acis_sci_run_te5x5.perl      	");
+		system("/usr/local/bin/perl $bin_dir/acis_sci_run_err3x3.perl     	");
+		system("/usr/local/bin/perl $bin_dir/acis_sci_run_err5x5.perl     	");
+		system("/usr/local/bin/perl $bin_dir/acis_sci_run_high_evnt3x3.perl    ");
+		system("/usr/local/bin/perl $bin_dir/acis_sci_run_high_evnt5x5.perl    ");
 	}
 
 #
 #--- change ps file to gif file
 #
-	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
+	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
 
-	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te3_3_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te3_3_out.gif");
+	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te3_3_out.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $root_dir/$current_dir/te3_3_out.gif");
 
-	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te5_5_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te5_5_out.gif");
+	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te5_5_out.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $root_dir/$current_dir/te5_5_out.gif");
 
-	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te_raw_out.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $root_dir/$current_dir/te_raw_out.gif");
+	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te_raw_out.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $root_dir/$current_dir/te_raw_out.gif");
 
 #	system("rm ./Working_dir/*ps");
 }

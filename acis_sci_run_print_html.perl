@@ -6,7 +6,7 @@
 #											#
 #	Author:	Takashi Isobe (tisobe@cfa.harvard.edu)					#
 #											#
-#	Last Update: Sep 20, 2010  							#
+#	Last Update: Jul 20, 2012  							#
 #											#
 #########################################################################################
 
@@ -54,11 +54,14 @@ $uyday++;
 #############################################
 #---------- set directries-------------
 
-$root_dir     = '/data/mta/www/mta_acis_sci_run/';      #--- acis sci run main directory
-
-$bin_dir      = '/data/mta/MTA/bin/';                  #--- a directory which holds scripts
-
-$bin_data_dir = '/data/mta/MTA/data/Acis_sci_run';     #--- a directory which holds bin data
+$dir_list = '/data/mta/Script/ACIS/Acis_sci_run/house_keeping/dir_list';
+open(FH, $dir_list);
+while(<FH>){
+    chomp $_;
+    @atemp = split(/\s+/, $_);
+    ${$atemp[0]} = $atemp[1];
+}
+close(FH);
 
 $current_dir  = 'Year'."$uyear";                        #--- seting a current output directory
 

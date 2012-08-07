@@ -11,7 +11,7 @@ use PGPLOT;
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)			#
 #									#
 #	Aug 23, 2005: first version					#
-#	Last update: 	Jul 15, 2009					#
+#	Last update: 	Jul 23, 2012					#
 #									#
 #########################################################################
 
@@ -23,15 +23,32 @@ $last_year = $uyear - 1;
 #############################################
 #---------- set directries-------------
 
-$root_dir     = '/data/mta/www/mta_acis_sci_run/';      #--- acis sci run main directory
-
-$bin_dir      = '/data/mta/MTA/bin/';                  #--- a directory which holds scripts
-
-$bin_data_dir = '/data/mta/MTA/data/Acis_sci_run';     #--- a directory which holds bin data
+$dir_list = '/data/mta/Script/ACIS/Acis_sci_run/house_keeping/dir_list';
+open(FH, $dir_list);
+while(<FH>){
+    chomp $_;
+    @atemp = split(/\s+/, $_);
+    ${$atemp[0]} = $atemp[1];
+}
+close(FH);
 
 $current_dir  = 'Year'."$uyear";                        #--- seting a current output directory
+
+#
+#--- setting a directory path to ppmtogif
+#
+
+$host = `hostname`;
+chomp $host;
+if($host eq 'rhodes' || host eq 'colossus'){
+    $ppm_dir = "/home/ascds/DS.release/ots/bin/";
+}else{
+    $ppm_dir = '/usr/bin/';
+}
+    
 #
 #############################################
+
 
 $list = `ls -d $root_dir`;
 if($list =~ /$$current_dir/){
@@ -132,7 +149,7 @@ foreach $mode ('cc3_3', 'te3_3', 'te5_5', 'te_raw'){
 
 	$out_name = "$root_dir".'Long_term/long_term_'."$mode".'.gif';
 
-	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./pgplot.ps|$bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_name");
+	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./pgplot.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $out_name");
 	system("rm pgplot.ps");
 }
 
