@@ -6,7 +6,7 @@
 #											#
 #	Author:	Takashi Isobe (tisobe@cfa.harvard.edu)					#
 #											#
-#	Last Update: Jul 20, 2012  							#
+#	Last Update: Sep 27, 2012  							#
 #											#
 #########################################################################################
 
@@ -73,14 +73,21 @@ $http_dir     = 'http://asc.harvard.edu/mta_days/mta_acis_sci_run/';
 
 open(OUT, ">$root_dir/science_run.html");
 
-print OUT "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> \n";
+print OUT "<!DOCTYPE html> \n";
 print OUT " \n";
 print OUT "<html> \n";
 print OUT "<head> \n";
+print OUT "	   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' /> \n";
 print OUT "        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://asc.harvard.edu/mta/REPORTS/Template/mta.css\" /> \n";
+print OUT "        <style  type='text/css'>\n";
+print OUT "        table{text-align:center;margin-left:auto;margin-right:auto;border-style:solid;border-spacing:8px;border-width:2px;border-collapse:separate}\n";
+print OUT "        td{text-align:center;padding:8px}\n";
+print OUT "        </style>\n";
+
+
 print OUT "        <title> ACIS Science Run</title> \n";
 print OUT " \n";
-print OUT "        <script language=\"JavaScript\"> \n";
+print OUT "        <script> \n";
 print OUT "                function WindowOpener(imgname) { \n";
 print OUT "                        msgWindow = open(\"\",\"displayname\",\"toolbar=no,directories=no,menubar=no,location=no,scrollbars=no,status=no,width=1100,height=800,resize=no\"); \n";
 print OUT "                        msgWindow.document.clear(); \n";
@@ -104,27 +111,27 @@ print OUT "(DOY: $uyday / DOM: $dom)\n ";
 print OUT '</h2>';
 print OUT "\n";
 
-print OUT '<hr \>';
+print OUT '<hr />',"\n";
 
 
-print OUT '<p>';
+print OUT '<p>',"\n";
 print OUT 'Data plotted here are taken from psi processing log ',"\n";
 print OUT "(<a href='http://acis.mit.edu/acs'>http://acis.mit.edu/acs</a>). There are three plots in \n";
 print OUT 'each FEP mode:',"\n";
 print OUT '</p>';
-print OUT '<p>';
-print OUT "<table border=0 cellpadding=3 cellpsacing=3 style='padding-left:60px'> \n";
-print OUT '<tr><td>Top:</td><td> evnets per second for each science run</td></tr>',"\n";
-print OUT '<tr><td>Middle:</td><td> numbers of errors reported by psi per ksec for each science run</td></tr>',"\n";
-print OUT '<tr><td>Bottom:</td><td> Percentage of exposures dropped for each science run</td></tr>',"\n";
+#print OUT '<p>';
+print OUT "<table style='border-width:0px;padding-left:60px'> \n";
+print OUT '<tr><td>Top:</td><td style="text-align:left"> evnets per second for each science run</td></tr>',"\n";
+print OUT '<tr><td>Middle:</td><td style="text-align:left"> numbers of errors reported by psi per ksec for each science run</td></tr>',"\n";
+print OUT '<tr><td>Bottom:</td><td style="text-align:left"> Percentage of exposures dropped for each science run</td></tr>',"\n";
 print OUT '</table>',"\n";
-print OUT '</p>';
+#print OUT '</p>',"\n";
 print OUT '<p>';
 print OUT "For more  details, plese go to <a href='http://acis.mit.edu/acs'>mit web site</a>. \n";
 print OUT '</p>';
 
 
-print OUT "<table border =0> \n";
+print OUT "<table style='border-width:0px'> \n";
 print OUT "<tr><td> \n";
 print OUT '<h2> Plots by FEP Mode </h2>',"\n";
 print OUT "</td><td> \n";
@@ -133,7 +140,7 @@ print OUT "</td></tr> \n";
 print OUT "<tr><td> \n";
 
 
-print OUT '<table border = 0 cellspacing=5 cellpadding=5>',"\n";
+print OUT "<table style='border-width:0px'>\n";
 print OUT '<tr>',"\n";
 print OUT '<th>This Year</th>',"\n";
 print OUT "<td><a href=\"javascript:WindowOpener('Year$uyear/te3_3_out.gif')\"> TE 3X3 </a></td> \n";
@@ -142,7 +149,7 @@ print OUT "<td><a href=\"javascript:WindowOpener('Year$uyear/te5_5_out.gif')\"> 
 print OUT "<td>  --- </td> \n";
 print OUT "<td><a href=\"javascript:WindowOpener('Year$uyear/cc3_3_out.gif')\"> CC 3X3 </a></td> \n";
 print OUT '</tr>',"\n";
-print OUT '<th>Entire Period</th>',"\n";
+print OUT '<tr><th>Entire Period</th>',"\n";
 print OUT "<td><a href=\"javascript:WindowOpener('Long_term/long_term_te3_3.gif')\"> TE 3X3 </a></td> \n";
 print OUT "<td><a href=\"javascript:WindowOpener('Long_term/long_term_te5_5.gif')\"> TE 5X5 </a></td> \n";
 print OUT "<td><a href=\"javascript:WindowOpener('Long_term/long_term_te_raw.gif')\"> TE Raw </a></td> \n";
@@ -152,20 +159,20 @@ print OUT '</tr></table>',"\n";
 print OUT "</td><td>\n";
 
 
-print OUT '<table border = 0 cellpadding=1    cellpspacing=1>', "\n";
+print OUT "<table style='border-width:0px'>\n";
 print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/data',"$uyear",' target="_blank">DATA Plotted (ASCII format)</a></td></tr>',"\n";
 
-print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/drop_',"$uyear".' target="_blank">Te3x3 DATA with Dropped Rate > 3 %</a></td></tr>',"\n";
+print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/drop_',"$uyear".' target="_blank">Te3x3 DATA with Dropped Rate &gt; 3 %</a></td></tr>',"\n";
 
-print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/drop_5x5_',"$uyear".' target="_blank">Te5x5 DATA with Dropped Rate > 3 %</a></td></tr>',"\n";
+print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/drop_5x5_',"$uyear".' target="_blank">Te5x5 DATA with Dropped Rate &gt; 3 %</a></td></tr>',"\n";
 
-print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_event_',"$uyear".' target="_blank">Te3x3 DATA with Event Rate > 180 cnt/sec</td></th>',"\n";
+print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_event_',"$uyear".' target="_blank">Te3x3 DATA with Event Rate &gt; 180 cnt/sec</a></td></tr>',"\n";
 
-print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_event5x5_',"$uyear".' target="_blank">Te5x5 DATA with Event Rate > 56 cnt/sec</a></td></tr>',"\n";
+print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_event5x5_',"$uyear".' target="_blank">Te5x5 DATA with Event Rate &gt; 56 cnt/sec</a></td></tr>',"\n";
 
-print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_error_',"$uyear".' target="_blank">Te3x3 DATA with Error # > 1 cnt/ksec</a></td></tr>',"\n";
+print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_error_',"$uyear".' target="_blank">Te3x3 DATA with Error # &gt; 1 cnt/ksec</a></td></tr>',"\n";
 
-print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_error5x5_',"$uyear".' target="_blank">Te5x5 DATA with Error # > 1 cnt/ksec</a></td></tr>',"\n";
+print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_error5x5_',"$uyear".' target="_blank">Te5x5 DATA with Error # > &gt; cnt/ksec</a></td></tr>',"\n";
 print OUT '</table>',"\n";
 
 print OUT "</td></tr> \n";
@@ -175,7 +182,7 @@ print OUT '<br>',"\n";
 print OUT '<hr />',"\n";
 
 print OUT '<h2>Plots/Data for Each Year </h2>',"\n";
-print OUT "<table border=0 cellpadding=4 cellspacing=5> \n";
+print OUT "<table style='border-width:0px'> \n";
 print OUT "<tr> \n";
 $j = 0;
 for($iyear = 1999; $iyear <= $uyear; $iyear++){
@@ -190,7 +197,7 @@ for($iyear = 1999; $iyear <= $uyear; $iyear++){
 		$j++;
 	}
 }
-print OUT "</table> \n";
+print OUT "</tr></table> \n";
 print OUT "<p> \n";
 print OUT '<strong><a href=',"$http_dir",'Long_term/science_long_term.html>Entire Period</a></strong>',"\n";
 print OUT "</p> \n";
@@ -201,20 +208,20 @@ print OUT "If you have any questions about this page, please contact <a href='ma
 print OUT "</strong></em>\n </p>\n";
 
 
-print OUT "<table border=0> \n";
+print OUT "<table style='border-width:0px'> \n";
 print OUT "<tr> \n";
-print OUT "<th width=10% style='text-align:center'>Go to: </th> \n";
-print OUT "<th width=30% style='text-align:center'> \n";
+print OUT "<th style='width:10%;text-align:center'>Go to: </th> \n";
+print OUT "<th style='width:30%;text-align:center'> \n";
 print OUT '<a href=http://acis.mit.edu/asc>Acis Science Run, MIT site</a>',"\n";
 print OUT "</th> \n";
-#print OUT "<th width=30% style='text-align:center'> \n";
+#print OUT "<th style='width:30%;text-align:center'> \n";
 #print OUT '<a href=http://asc.harvard.edu/mta_days/mta_acis_sci_run/science_run.html>Main Page</a>',"\n";
 #print OUT "</th> \n";
-print OUT "<th width=30% style='text-aling:center'> \n";
+print OUT "<th style='width:30%;text-aling:center'> \n";
 print OUT '<a href=http://asc.harvard.edu/mta/sot.html>SOT page</a>';
 print OUT "</th> \n";
 print OUT "</table> \n";
-print OUT "</p> \n";
+#print OUT "</p> \n";
 close(OUT);
 
 
@@ -226,14 +233,20 @@ $h_name = "$root_dir/".'Year'."$uyear".'/science_run'."$uyear".'.html';
 
 open(OUT, ">$h_name");
 
-print OUT "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> \n";
+print OUT "<!DOCTYPE html> \n";
 print OUT " \n";
-print OUT "<html> \n";
+print OUT "<html>\n";
 print OUT "<head> \n";
-print OUT "        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://asc.harvard.edu/mta/REPORTS/Template/mta.css\" /> \n";
-print OUT "        <title> ACIS Science Run: Year $uyear </title> \n";
+print OUT "        <meta http-equiv='Content-Type' content='text/html; charset=utf-8' /> \n";
+print OUT '        <link rel="stylesheet" type="text/css" href="http://asc.harvard.edu/mta/REPORTS/Template/mta.css" />', " \n";
+print OUT "        <style  type='text/css'> \n";
+print OUT "        table{text-align:center;margin-left:auto;margin-right:auto;border-style:solid;border-spacing:8px;border-width:2px;border-collapse:separate} \n";
+print OUT "        td{text-align:center;padding:8px} \n";
+print OUT "        </style> \n";
+print OUT "        <title>Science Run Year: $uyear </title> \n";
+
 print OUT " \n";
-print OUT "        <script language=\"JavaScript\"> \n";
+print OUT "        <script> \n";
 print OUT "                function WindowOpener(imgname) { \n";
 print OUT "                        msgWindow = open(\"\",\"displayname\",\"toolbar=no,directories=no,menubar=no,location=no,scrollbars=no,status=no,width=1100,height=800,resize=no\"); \n";
 print OUT "                        msgWindow.document.clear(); \n";
@@ -257,26 +270,26 @@ print OUT "(DOY: $uyday / DOM: $dom)\n ";
 print OUT '</h2>';
 print OUT "\n";
 
-print OUT '<hr \>';
+print OUT '<hr />',"\n";
 
 
-print OUT 'Data plotted here are taken from psi processing log ',"\n";
+print OUT '<p>Data plotted here are taken from psi processing log ',"\n";
 print OUT "(<a href='http://acis.mit.edu/acs'>http://acis.mit.edu/acs</a>). There are three plots in \n";
 print OUT 'each FEP mode:',"\n";
 print OUT '</p>';
-print OUT '<p>';
-print OUT "<table border=0 cellpadding=3 cellpsacing=3 style='padding-left:60px'> \n";
-print OUT '<tr><td>Top:</td><td> evnets per second for each science run</td></tr>',"\n";
-print OUT '<tr><td>Middle:</td><td> numbers of errors reported by psi per ksec for each science run</td></tr>',"\n";
-print OUT '<tr><td>Bottom:</td><td> Percentage of exposures dropped for each science run</td></tr>',"\n";
+#print OUT '<p>';
+print OUT "<table style='border-width:0px;padding-left:60px'> \n";
+print OUT '<tr><td>Top:</td><td style="text-align:left"> evnets per second for each science run</td></tr>',"\n";
+print OUT '<tr><td>Middle:</td><td style="text-align:left"> numbers of errors reported by psi per ksec for each science run</td></tr>',"\n";
+print OUT '<tr><td>Bottom:</td><td style="text-align:left"> Percentage of exposures dropped for each science run</td></tr>',"\n";
 print OUT '</table>',"\n";
-print OUT '</p>';
+#print OUT '</p>';
 print OUT '<p>';
 print OUT "For more  details, plese go to <a href='http://acis.mit.edu/acs'>mit web site</a>. \n";
 print OUT '</p>';
 
 
-print OUT "<table border =0> \n";
+print OUT "<table style='border-width:0px'> \n";
 print OUT "<tr><td> \n";
 print OUT '<h2> Plots by FEP Mode </h2>',"\n";
 print OUT "</td><td> \n";
@@ -285,7 +298,7 @@ print OUT "</td></tr> \n";
 print OUT "<tr><td> \n";
 
 
-print OUT '<table border = 0 cellspacing=5 cellpadding=5>',"\n";
+print OUT "<table style='border-width:0px'>\n";
 print OUT '<tr>',"\n";
 print OUT '<th>This Year</th>',"\n";
 print OUT "<td><a href=\"javascript:WindowOpener('te3_3_out.gif')\"> TE 3X3 </a></td> \n";
@@ -293,19 +306,19 @@ print OUT "<td><a href=\"javascript:WindowOpener('te5_5_out.gif')\"> TE 5X5 </a>
 print OUT "<td><a href=\"javascript:WindowOpener('te_raw_out.gif')\"> TE Raw </a></td> \n";
 print OUT "<td><a href=\"javascript:WindowOpener('cc3_3_out.gif')\"> CC 3X3 </a></td> \n";
 print OUT '</tr>',"\n";
-print OUT '</tr></table>',"\n";
+print OUT '</table>',"\n";
 
 print OUT "</td><td>\n";
 
 
-print OUT '<table border = 0 cellpadding=1    cellpspacing=1>', "\n";
+print OUT "<table style='border-width:0px'>\n";
 print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/data',"$uyear",' target="_blank">DATA Plotted (ASCII format)</a></td></tr>',"\n";
 
 print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/drop_',"$uyear".' target="_blank">Te3x3 DATA with Dropped Rate > 3 %</a></td></tr>',"\n";
 
 print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/drop_5x5_',"$uyear".' target="_blank">Te5x5 DATA with Dropped Rate > 3 %</a></td></tr>',"\n";
 
-print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_event_',"$uyear".' target="_blank">Te3x3 DATA with Event Rate > 180 cnt/sec</td></th>',"\n";
+print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_event_',"$uyear".' target="_blank">Te3x3 DATA with Event Rate > 180 cnt/sec</a></td></tr>',"\n";
 
 print OUT '<tr><td><a href=',"$http_dir/$current_dir",'/high_event5x5_',"$uyear".' target="_blank">Te5x5 DATA with Event Rate > 56 cnt/sec</a></td></tr>',"\n";
 
@@ -327,20 +340,20 @@ print OUT "If you have any questions about this page, please contact <a href='ma
 print OUT "</strong></em>\n </p>\n";
 
 
-print OUT "<table border=0> \n";
+print OUT "<table style='border-width:0px'> \n";
 print OUT "<tr> \n";
-print OUT "<th width=10% style='text-align:center'>Go to: </th> \n";
-print OUT "<th width=30% style='text-align:center'> \n";
+print OUT "<th style='width:30%;text-align:center'>Go to: </th> \n";
+print OUT "<th style='width:30%;text-align:center'> \n";
 print OUT '<a href=http://acis.mit.edu/asc>Acis Science Run, MIT site</a>',"\n";
 print OUT "</th> \n";
-print OUT "<th width=30% style='text-align:center'> \n";
+print OUT "<th style='width:30%;text-align:center'> \n";
 print OUT '<a href=http://asc.harvard.edu/mta_days/mta_acis_sci_run/science_run.html>Main Page</a>',"\n";
 print OUT "</th> \n";
-print OUT "<th width=30% style='text-aling:center'> \n";
+print OUT "<th style='width:30%;text-aling:center'> \n";
 print OUT '<a href=http://asc.harvard.edu/mta/sot.html>SOT page</a>';
 print OUT "</th> \n";
 print OUT "</table> \n";
-print OUT "</p> \n";
+#print OUT "</p> \n";
 
 close(OUT);
 
@@ -352,14 +365,20 @@ close(OUT);
 $h_name = "$root_dir".'/Long_term/science_long_term.html';
 open(OUT, ">$h_name");
 
-print OUT "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> \n";
+print OUT "<!DOCTYPE html> \n";
 print OUT " \n";
 print OUT "<html> \n";
 print OUT "<head> \n";
-print OUT "        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://asc.harvard.edu/mta/REPORTS/Template/mta.css\" /> \n";
+print OUT "	   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' /> \n";
+print OUT '        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://asc.harvard.edu/mta/REPORTS/Template/mta.css\" />'," \n";
+print OUT "        <style  type='text/css'> \n";
+print OUT "        table{text-align:center;margin-left:auto;margin-right:auto;border-style:solid;border-spacing:8px;border-width:2px;border-collapse:separate} \n";
+print OUT "        td{text-align:center;padding:8px} \n";
+print OUT "        </style> \n";
+
 print OUT "        <title> ACIS Science Run: Entire Period</title> \n";
 print OUT " \n";
-print OUT "        <script language=\"JavaScript\"> \n";
+print OUT "        <script> \n";
 print OUT "                function WindowOpener(imgname) { \n";
 print OUT "                        msgWindow = open(\"\",\"displayname\",\"toolbar=no,directories=no,menubar=no,location=no,scrollbars=no,status=no,width=1100,height=800,resize=no\"); \n";
 print OUT "                        msgWindow.document.clear(); \n";
@@ -383,18 +402,18 @@ print OUT "(DOY: $uyday / DOM: $dom)\n ";
 print OUT '</h2>';
 print OUT "\n";
 
-print OUT '<hr \>';
+print OUT '<hr />',"\n";
 
-print OUT '<p>';
+print OUT '<p>',"\n";
 print OUT 'Data plotted here are taken from psi processing log ',"\n";
 print OUT "(<a href='http://acis.mit.edu/acs'>http://acis.mit.edu/acs</a>). There are three plots in \n";
 print OUT 'each FEP mode:',"\n";
 print OUT '</p>';
 print OUT '<p>';
-print OUT "<table border=0 cellpadding=3 cellpsacing=3 style='padding-left:60px'> \n";
-print OUT '<tr><td>Top:</td><td> evnets per second for each science run</td></tr>',"\n";
-print OUT '<tr><td>Middle:</td><td> numbers of errors reported by psi per ksec for each science run</td></tr>',"\n";
-print OUT '<tr><td>Bottom:</td><td> Percentage of exposures dropped for each science run</td></tr>',"\n";
+print OUT "<table style='border-width:0px;padding-left:60px'> \n";
+print OUT '<tr><td>Top:</td><td style="text-align:left"> evnets per second for each science run</td></tr>',"\n";
+print OUT '<tr><td>Middle:</td><td style="text-align:left"> numbers of errors reported by psi per ksec for each science run</td></tr>',"\n";
+print OUT '<tr><td>Bottom:</td><td style="text-align:left"> Percentage of exposures dropped for each science run</td></tr>',"\n";
 print OUT '</table>',"\n";
 print OUT '</p>';
 print OUT '<p>';
@@ -402,7 +421,7 @@ print OUT "For more  details, plese go to <a href='http://acis.mit.edu/acs'>mit 
 print OUT '</p>';
 
 
-print OUT "<table border =0> \n";
+print OUT "<table style='border-width:0px'> \n";
 print OUT "<tr><td> \n";
 print OUT '<h2> Plots by FEP Mode </h2>',"\n";
 print OUT "</td><td> \n";
@@ -411,7 +430,7 @@ print OUT "</td></tr> \n";
 print OUT "<tr><td> \n";
 
 
-print OUT '<table border = 0 cellspacing=5 cellpadding=5>',"\n";
+print OUT "<table style='border-width:0px'>\n";
 print OUT '<tr>',"\n";
 print OUT '<th>Entire Period</th>',"\n";
 print OUT "<td><a href=\"javascript:WindowOpener('long_term_te3_3.gif')\"> TE 3X3 </a></td> \n";
@@ -423,14 +442,14 @@ print OUT '</tr></table>',"\n";
 print OUT "</td><td>\n";
 
 
-print OUT '<table border = 0 cellpadding=1    cellpspacing=1>', "\n";
+print OUT "<table style='border-width:0px'>\n";
 print OUT '<tr><td><a href=',"$http_dir/Long_term",'/data target="_blank">DATA Plotted (ASCII format)</a></td></tr>',"\n";
 
 print OUT '<tr><td><a href=',"$http_dir/Long_term",'/drop target="_blank">Te3x3 DATA with Dropped Rate > 3 %</a></td></tr>',"\n";
 
 print OUT '<tr><td><a href=',"$http_dir/Long_term",'/drop_5x5 target="_blank">Te5x5 DATA with Dropped Rate > 3 %</a></td></tr>',"\n";
 
-print OUT '<tr><td><a href=',"$http_dir/Long_term",'/high_event target="_blank">Te3x3 DATA with Event Rate > 180 cnt/sec</td></th>',"\n";
+print OUT '<tr><td><a href=',"$http_dir/Long_term",'/high_event target="_blank">Te3x3 DATA with Event Rate > 180 cnt/sec</a></td></tr>',"\n";
 
 print OUT '<tr><td><a href=',"$http_dir/Long_term",'/high_event5x5 target="_blank">Te5x5 DATA with Event Rate > 56 cnt/sec</a></td></tr>',"\n";
 
@@ -451,16 +470,16 @@ print OUT "If you have any questions about this page, please contact <a href='ma
 print OUT "</strong></em>\n </p>\n";
 
 
-print OUT "<table border=0> \n";
+print OUT "<table style='border-width:0px'> \n";
 print OUT "<tr> \n";
-print OUT "<th width=10% style='text-align:center'>Go to: </th> \n";
-print OUT "<th width=30% style='text-align:center'> \n";
+print OUT "<th style='width:10%;text-align:center'>Go to: </th> \n";
+print OUT "<th style='width:30%;text-align:center'> \n";
 print OUT '<a href=http://acis.mit.edu/asc>Acis Science Run, MIT site</a>',"\n";
 print OUT "</th> \n";
-print OUT "<th width=30% style='text-align:center'> \n";
+print OUT "<th style='width:30%;text-align:center'> \n";
 print OUT '<a href=http://asc.harvard.edu/mta_days/mta_acis_sci_run/science_run.html>Main Page</a>',"\n";
 print OUT "</th> \n";
-print OUT "<th width=30% style='text-aling:center'> \n";
+print OUT "<th  style='width:30%;text-aling:center'> \n";
 print OUT '<a href=http://asc.harvard.edu/mta/sot.html>SOT page</a>';
 print OUT "</th> \n";
 print OUT "</table> \n";
