@@ -5,23 +5,39 @@
 #	acis_sci_run_get_data.perl: obtain data from MIT and plot acis science run	#
 #											#
 #	Author: Takashi Isobe (tisobe@cfa.harvard.edu)					#
-#	Last update: Jul 23,  2012							#
+#	Last update: Feb 11,  2013							#
 #											#
 #########################################################################################
 
+#
+#--- check whether this is a test run 
+#
 
-($usec, $umin, $uhour, $umday, $umon, $uyear, $uwday, $uyday, $uisdst)= localtime(time);
+$comp_test = $ARGV[0];
+chomp $comp_test;
 
-if($uyear < 1900) {
-       	$uyear = 1900 + $uyear;
+if($comp_test =~ /test/){
+	$uyear = 2012;
+}else{
+	($usec, $umin, $uhour, $umday, $umon, $uyear, $uwday, $uyday, $uisdst)= localtime(time);
+
+	if($uyear < 1900) {
+       		$uyear = 1900 + $uyear;
+	}
 }
+
 
 #############################################
 #
 #---------- set directries-------------
 #
 
-$dir_list = '/data/mta/Script/ACIS/Acis_sci_run/house_keeping/dir_list';
+if($comp_test =~ /test/i){
+	$dir_list = '/data/mta/Script/ACIS/Acis_sci_run/house_keeping/dir_list_test';
+}else{
+	$dir_list = '/data/mta/Script/ACIS/Acis_sci_run/house_keeping/dir_list';
+}
+
 open(FH, $dir_list);
 while(<FH>){
     chomp $_;
@@ -64,14 +80,21 @@ system("mkdir ./param");
 #---- check whether this year's directory exists
 #
 
-$test_in = `ls -d $root_dir/Year*`;
-@chk_dir = split(/\s+/, $test_in);
-$chk_new = 1;
+
+if($comp_test =~ /test/i){
+	$chk_new = 0;
+	system("mkdir $root_dir");
+	system("mkdir $root_dir/$current_dir");
+}else{
+	$test_in = `ls -d $root_dir/Year*`;
+	@chk_dir = split(/\s+/, $test_in);
+	$chk_new = 1;
 OUTER:
-foreach $ent (@chk_dir){
-	if($ent =~ /$current_dir/){
-		$chk_new = 0;
-		last OUTER;
+	foreach $ent (@chk_dir){
+		if($ent =~ /$current_dir/){
+			$chk_new = 0;
+			last OUTER;
+		}
 	}
 }
 
@@ -274,7 +297,9 @@ sub separate_data{
 ################################################################################
 
 sub get_mit_data{
-	system("mv $root_dir/$current_dir/input_data  $root_dir/$current_dir/input_data~");
+	if($comp_test !~ /test/i){
+		system("mv $root_dir/$current_dir/input_data  $root_dir/$current_dir/input_data~");
+	}
 	
 #
 #---- read the past data list
@@ -291,25 +316,32 @@ sub get_mit_data{
 #--- first find out the latest version of phase by reading main html page 
 #--- here is the lnyx script to obtain web page data
 #
-		system("$lynx_dir/lynx -source http://acis.mit.edu/asc/ >./Working_dir/phase_check");
-		system("cat ./Working_dir/phase_check|grep Phase > ./Working_dir/phase_check2");
-		open(IN, './Working_dir/phase_check2');
-		@phase_list = ();
-		$p_cnt = 0;
-		while(<IN>){
-			chomp $_;
-			@atemp = split(/Phase /, $_);
-			@btemp = split(/\</, $atemp[1]);
-			if($btemp[0] =~ /\d/){
-				push(@phase_list, $btemp[0]);
-				$p_cnt++;
-			}
+	system("$lynx_dir/lynx -source http://acis.mit.edu/asc/ >./Working_dir/phase_check");
+	system("cat ./Working_dir/phase_check|grep Phase > ./Working_dir/phase_check2");
+	open(IN, './Working_dir/phase_check2');
+	@phase_list = ();
+	$p_cnt = 0;
+	while(<IN>){
+		chomp $_;
+		@atemp = split(/Phase /, $_);
+		@btemp = split(/\</, $atemp[1]);
+		if($btemp[0] =~ /\d/){
+			push(@phase_list, $btemp[0]);
+			$p_cnt++;
 		}
-		close(IN);
-		system("rm ./Working_dir/phase_check*");
-		@p_temp      = sort{$a<=>$b} @phase_list;
-		$last_phase  = $p_temp[$p_cnt -1];
-		$first_phase = $last_phase - 3;	
+	}
+	close(IN);
+	system("rm ./Working_dir/phase_check*");
+	@p_temp      = sort{$a<=>$b} @phase_list;
+	$last_phase  = $p_temp[$p_cnt -1];
+	$first_phase = $last_phase - 3;	
+#
+#--- if this is a test case, choose only phase 71	(02/03/12 - 04/22/12)
+#
+	if($comp_test =~ /test/i){
+		$first_phase = 71;
+		$last_phase  = 71;
+	}
 		
 	OUTER:
 	for($version = $first_phase; $version <= $last_phase; $version++){
@@ -341,6 +373,7 @@ sub get_mit_data{
 #
 		@new_data = @checkdata;
 	}
+
 #
 #---- list of columns to extract
 #	
@@ -553,7 +586,10 @@ sub get_mit_data{
 	cleanup();
 
 	$name2 = "$name".'~';
-	system("mv $name $name2");
+
+	if($comp_test !~ /test/i){
+		system("mv $name $name2");
+	}
 	system("mv ./Working_dir/old_data $name");
 }
 
@@ -598,13 +634,13 @@ sub plot_script{
 #
 #--- change ps file to gif file
 #
-	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/cc3_3_out.ps|pnmflip -r270 |ppmtogif > $root_dir/$current_dir/cc3_3_out.gif");
 
-	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te3_3_out.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $root_dir/$current_dir/te3_3_out.gif");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te3_3_out.ps|pnmflip -r270 |ppmtogif > $root_dir/$current_dir/te3_3_out.gif");
 
-	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te5_5_out.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $root_dir/$current_dir/te5_5_out.gif");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te5_5_out.ps|pnmflip -r270 |ppmtogif > $root_dir/$current_dir/te5_5_out.gif");
 
-	system("echo ''|$ppm_dir/gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te_raw_out.ps|pnmflip -r270 |$ppm_dir/ppmtogif > $root_dir/$current_dir/te_raw_out.gif");
+	system("echo ''|gs -sDEVICE=ppmraw  -r100x100 -q -NOPAUSE -sOutputFile=- ./Working_dir/te_raw_out.ps|pnmflip -r270 |ppmtogif > $root_dir/$current_dir/te_raw_out.gif");
 
 #	system("rm ./Working_dir/*ps");
 }
