@@ -1,13 +1,9 @@
-#
----- the operation was moved to r2d2 on Jul 30, 2012
-#
-
 ################
 ACIS Science Run
 ################
 
-This set of scripts retrieve ACIS science run data from MIT web site, check event rate, error rate, 
-and drop rate and plot trends. If any of these higher than specified limits, it will send out 
+This set of scripts retrieve ACIS science run data from MIT web site, check event rate, error rate,
+and drop rate and plot trends. If any of these higher than specified limits, it will send out
 email notification.
 
 ##########
@@ -16,62 +12,65 @@ How to run
 
 Create a directory for computation, then type:
 
-	/data/mta4/MTA/bin/acis_sci_run_wrap_script
+    /data/mta/Script/ACIS/Acis_sci_run/Script/acis_sci_run_wrap_script
 
 The output are automatically directed into /data/mta/www/mta_acis_sci_run directory.
-If you want to change directories of input/output, change $root_dir/$bin_dir/$current_dir etc (see below).
+If you want to change directories of input/output, change $web_dir/$bin_dir/$current_dir etc (see below).
 
-This must be run on rhodes.
+If you want to run test run:
 
-###################
-Script descriptions
-###################
+    /data/mta/Script/ACIS/Acis_sci_run/Script/acis_sci_run_wrap_script1 ----- test a regualr operation
+    /data/mta/Script/ACIS/Acis_sci_run/Script/acis_sci_run_wrap_script2 ----- test data at year change
 
-All scripts below are in /data/mta4/MTA/bin.
+         
+################### 
+Script descriptions 
+################### 
 
+Directory settings:
+-------------------
+See  /data/mta/Script/ACIS/Acis_sci_run/house_keeping/dir_list_py
 
-Directory setting:
-------------------
-
-$root_dir     = '/data/mta/www/mta_acis_sci_run/';      #--- acis sci run main directory
-
-$bin_dir      = '/data/mta4/MTA/bin/';                  #--- a directory which holds scripts
-
-$bin_data_dir = '/data/mta4/MTA/data/';                 #--- a directory which holds bin data
-
-$current_dir  = 'Year'."$uyear";                        #--- a current output directory (under $root_dir)
-							     $uyear is this year (e.g. 2005)
-
-$http_dir     = 'http://asc.harvard.edu/mta_days/mta_acis_sci_run/';
-							#--- http page address
+'/data/mta/www/mta_acis_sci_run/'                   :web_dir            #----- web directory
+'/data/mta/Script/ACIS/Acis_sci_run/house_keeping/' :house_keeping      #----- house keeping direcotry
+'/data/mta/Script/ACIS/Acis_sci_run/Script/'        :bin_dir            #----- script location
+'/data/mta/MTA/data/Acis_sci_run/'                  :bin_data_dir       #----- some information kept here
+'/data/mta/Script/Python_script2.7/'                :mta_dir            #----- mta related python function kept here
 
 
 acis_sci_run_wrap_script
-------------------------
-A wrapping script to run acis_sci_run scripts
-
-
-acis_sci_run_script
--------------------
-A main calling script. This also deletes two directories created and used by acis_sci_run_get_data.perl.
-
-
-acis_sci_run_get_data.perl
+acis_sci_run_wrap_script1
+acis_sci_run_wrap_script2
 --------------------------
-This is the main script control most of all other scripts related to acis science run.
+a wrap script to run the main script. The first one is the regular one and the latter two are for test. 
 
-Input:
+acis_sci_run_main_script
+acis_sci_run_main_script1
+acis_sci_run_main_script2
+--------------------------
+a main calling scripts for a regular and two types of tests.
 
-	http://acis.mit.edu/asc/: 	MIT ACIS main web page
-					this will be to check which data set is currently updated
 
-	http://acis.mit.edu/asc/acisproc<version>/acis<version>.xs3
-					<version> is a file version of the currently updated page
-	 	----- these pages are read using "/opt/local/bin/lynx -source <http page>"
+acis_sci_run_get_data.py
+------------------------
+The main script. If "test" is given as an argument, it will perform mid year test, and if "test2" is
+given, it will perform year transition test. 
 
-	$bin_data-dir/col_list2004: this file contains which columns we want to read.
+acis_sci_run_functions.py
+--------------------------
+several related functions are kept in this file
 
-	Descriptions of columns are following:
+
+mta_common_functions.py
+-----------------------
+this is kept in "mta_dir" : give a set of functions used by mta
+
+convertTimeFormat.py
+--------------------
+this is kept in 'mta_dir' : give mta realted time conversion fuctions.
+
+
+Descriptions of columns are following:
 		Col     #       Title           Description
 
 		A       0       #               Science run number
@@ -129,238 +128,34 @@ Input:
 		BA      52      inter-run       Kiloseconds since end of previous science run
 
 Output:
-
-        ./Working_dir/zdata_out:                 a new data part of the table.
-        $root_dir/$current_dir/data<year>:      the extracted table for this year.
-
-		data entires for this file are:
-			obs id
-			observation starting time
-			instrument (ACIS-I/ACIS-S)
-			# of CCDs used and configulation (I or S)
-			mode (Cc3x3, Te3x3 etc)
-			integration time (in K sec)
-			# of events
-			# of errors
-			# of dropped events
-			orgm	
-			grating (HTIG/LETG/NONE)
-			target name
-
-        $root_dir/$current_dir/te1_3_out        1x3 timed data table
-        $root_dir/$current_dir/te3_3_out        3x3 timed data table
-        $root_dir/$current_dir/te5_5_out        5x5 timed data table
-        $root_dir/$current_dir/te_raw_out       raw timed data table
-        $root_dir/$current_dir/te_hist_out      histogram timed data table
-        $root_dir/$current_dir/cc1_3_out        1x3 continuous data table
-        $root_dir/$current_dir/cc3_3_out        3x3 continuous data table
-        $root_dir/$current_dir/cc5_5_out        5x5 continuous data table
-        $root_dir/$current_dir/cc_raw_out       raw continuous data table
-        $root_dir/$current_dir/cc_hist_out      histogram continous data table
+        $web_dir/$current_dir/te1_3_out        1x3 timed data table
+        $web_dir/$current_dir/te3_3_out        3x3 timed data table
+        $web_dir/$current_dir/te5_5_out        5x5 timed data table
+        $web_dir/$current_dir/te_raw_out       raw timed data table
+        $web_dir/$current_dir/te_hist_out      histogram timed data table
+        $web_dir/$current_dir/cc1_3_out        1x3 continuous data table
+        $web_dir/$current_dir/cc3_3_out        3x3 continuous data table
+        $web_dir/$current_dir/cc5_5_out        5x5 continuous data table
+        $web_dir/$current_dir/cc_raw_out       raw continuous data table
+        $web_dir/$current_dir/cc_hist_out      histogram continous data table
 
         Note: out of these, we follow only te3x3, te5x5, te_raw, and cc3x3.
 
-	$root_dir/$current_dir/cc3_3_out.gift
-	$root_dir/$current_dir/te3_3_out.gift
-	$root_dir/$current_dir/te5_5_out.gift
-	$root_dir/$current_dir/te_raw_out.gift
+	    $web_dir/$current_dir/cc3_3_out.png
+	    $web_dir/$current_dir/te3_3_out.png
+	    $web_dir/$current_dir/te5_5_out.png
+	    $web_dir/$current_dir/te_raw_out.png
 	
-	$root_dir/science_run.html			a main http page
-	$root_dir/$current_dir/science_run.html		supplemental amin http page (used for past record)
-	$root_dir/Long_term/science_run.html		a main http page for a long term plots
-	$root_dir/$current_dir/cc3_3.html
-	$root_dir/$current_dir/te3_3.html
-	$root_dir/$current_dir/te5_5.html
-	$root_dir/$current_dir/te_raw.html
+	    $web_dir/science_run.html			        a main http page
+	    $web_dir/$current_dir/science_run.html		supplemental amin http page (used for past record)
+	    $web_dir/Long_term/science_run.html		    a main http page for a long term plots
+	    $web_dir/$current_dir/cc3_3.html
+	    $web_dir/$current_dir/te3_3.html
+	    $web_dir/$current_dir/te5_5.html
+	    $web_dir/$current_dir/te_raw.html
 
-Note:
-	this script calls all following perl scripts.
+	    $web_dir/Long_term/cc3_3_out.gif
+	    $web_dir/Long_term/te3_3_out.gif
+	    $web_dir/Long_term/te5_5_out.gif
+	    $web_dir/Long_term/te_raw_out.gif
 
-acis_sci_run_high_evnt3x3.perl
------------------------------
-	This script reads data<year> and selects out high count observations in 3x3 events.
-	If there is the high event observations, send out warning email.
-
-	criteria: mode: Te3x3 and events/1000 sec > 180.0
-
-Input:
-	$root_dir/$current_dir/data<year>
-
-Output:
-	$root_dir/$current_dir/high_event_<year>	
-		obsid   		OBSID
-		target                  Target name
-		start time      	Starting time
-		int time        	Integrated observation time
-		inst    		Instrument (ACIS-I or ACIS-S)
-		ccd             	# of CCDs used and which mode (I or S)
-		grat    		grating use (HETG/LETG/Node)
-		avg # of events/sec	Average # of events/sec for the observations
-
-
-acis_sci_run_high_evnt5x5.perl
------------------------------
-	This script reads data<year> and selects out high count observations in 5x5 events.
-	If there is the high event observations, send out  warning email.
-
-	criteria: mode: Te5x5 and events/1000 sec > 56.0
-
-Input:
-	$root_dir/$current_dir/data<year>
-
-Output:
-	$root_dir/$current_dir/high_event5x5_<year>
-		obsid   		OBSID
-		target                  Target name
-		start time      	Starting time
-		int time        	Integrated observation time
-		inst    		Instrument (ACIS-I or ACIS-S)
-		ccd             	# of CCDs used and which mode (I or S)
-		grat    		grating use (HETG/LETG/Node)
-		avg # of events/sec	Average # of events/sec for the observations
-
-
-acis_sci_run_te3x3.perl
-----------------------
-	This script reads data<year> and selected out high drop rates in 3x3 events.
-	If there is the high drop rate observations, send out  warning email.
-
-	criteria: mode Te3x3 and drop rate > 3.0
-
-Input:
-	$root_dir/$current_dir/data<year>
-
-Output:
-	$root_dir/$current_dir/drop_<year>
-		obsid   		OBSID
-		target                  Target name
-		start time      	Starting time
-		int time        	Integrated observation time
-		inst    		Instrument (ACIS-I or ACIS-S)
-		ccd             	# of CCDs used and which mode (I or S)
-		grat    		grating use (HETG/LETG/Node)
-		drop rate (%)		Drop rate in percentage
-
-acis_sci_run_te5x5.perl
-----------------------
-	This script reads data<year> and selected out high drop rates in 5x5 events.
-	If there is the high drop rate observations, send out  warning email.
-
-	criteria: mode Te5x5 and drop rate > 3.0
-
-Input:
-	$root_dir/$current_dir/data<year>
-
-Output:
-	$root_dir/$current_dir/drop_<year>
-		obsid   		OBSID
-		target                  Target name
-		start time      	Starting time
-		int time        	Integrated observation time
-		inst    		Instrument (ACIS-I or ACIS-S)
-		ccd             	# of CCDs used and which mode (I or S)
-		grat    		grating use (HETG/LETG/Node)
-		drop rate (%)		Drop rate in percentage
-
-acis_sci_run_err3x3.perl
------------------------
-	This script reads data<year> and selects out high error observations in 3x3 events.
-	If there is the high error observations, send out warning email.
-
-	criteria: mode: Te3x3 and errors/1000 sec > 1.0
-
-Input:
-	$root_dir/$current_dir/data<year>
-
-Output:
-	$root_dir/$current_dir/high_error_<year>
-		obsid   		OBSID
-		target                  Target name
-		start time      	Starting time
-		int time        	Integrated observation time
-		inst    		Instrument (ACIS-I or ACIS-S)
-		ccd             	# of CCDs used and which mode (I or S)
-		grat    		grating use (HETG/LETG/Node)
-		err/ksec		# of Error per k sec
-
-acis_sci_run_err5x5.perl
------------------------
-	This script reads data<year> and selects out high error observations in 5x5 events.
-	If there is the high error observations, send out warning email.
-
-	criteria: mode: Te3x3 and errors/1000 sec > 1.0
-
-Input:
-	$root_dir/$current_dir/data<year>
-
-Output:
-	$root_dir/$current_dir/high_error_<year>
-		obsid   		OBSID
-		target                  Target name
-		start time      	Starting time
-		int time        	Integrated observation time
-		inst    		Instrument (ACIS-I or ACIS-S)
-		ccd             	# of CCDs used and which mode (I or S)
-		grat    		grating use (HETG/LETG/Node)
-		err/ksec		# of Error per k sec
-
-
-acis_sci_run_plot.perl <data file>
------------------------------------
-	This script crates a ps plot for a given data
-
-Input:
-	<data file> 			take this as an argument
-					example: $root_dir/$current_dir/te3_3_out
-
-Output:
-	a post script file		pgplot.ps in computing directory
-
-
-acis_sci_run_print_html.perl
------------------------------
-	This script creates  several html pages.
-
-Input:
-	None
-
-Output:
-	$root_dir/science_run.html			a main http page
-	$root_dir/$current_dir/science_run.html		supplemental amin http page (used for past record)
-	$root_dir/Long_term/science_run.html		a main http page for a long term plots
-	$root_dir/$current_dir/cc3_3.html
-	$root_dir/$current_dir/te3_3.html
-	$root_dir/$current_dir/te5_5.html
-	$root_dir/$current_dir/te_raw.html
-
-acis_sci_runrm_dupl.perl <input file>
--------------
-	This script removes duplicated line from <input file>
-
-Input:
-	<input file>
-
-Output:
-	<input file>
-
-
-acis_sci_run_plot_long_term.perl
---------------------------------
-	This script is run independent for the acis_sci_run_get_data.perl, but read all data<year>
-	files from the past and create plots for the entire period.
-
-Input:
-	$root_dir/Year<year>/data<year>
-
-Output:
-
-	$root_dir/Long_term/cc3_3_out.gif
-	$root_dir/Long_term/te3_3_out.gif
-	$root_dir/Long_term/te5_5_out.gif
-	$root_dir/Long_term/te_raw_out.gif
-
---------
-C script 
---------
-pnmflip and ppmtogif are c scripts used to convert a ps file to a gif file
-Both of them are kept in /data/mta4/MTA/bin.
