@@ -6,7 +6,7 @@
 #                                                                               #
 #       author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                               #
-#       last update: May 09, 2013                                               #
+#       last update: Apr 30, 2014                                               #
 #                                                                               #
 #################################################################################
 
@@ -123,6 +123,7 @@ def acis_sci_run_print_html(html_dir, pyear, pmonth, pday,  pchk):
 
     update = str(pyear) + '-' + str(pmonth) + '-' + str(pday)
     dom    = int(tcnv.findDOM(pyear, pmonth, pday, 0, 0, 0))
+    ydate  = tcnv.findYearDate(pyear, pmonth, pday)
 #
 #---- update the main html page
 #
@@ -130,7 +131,7 @@ def acis_sci_run_print_html(html_dir, pyear, pmonth, pday,  pchk):
         ylist = ''
         j    = 0
         for ryear in range(1999, pyear+1):
-            ylist = ylist + '<td><a href=' + http_dir + '/Year' + str(ryear) + '/science_run' + str(ryear) + '.htnml>'
+            ylist = ylist + '<td><a href=' + http_dir + '/Year' + str(ryear) + '/science_run' + str(ryear) + '.html>'
             ylist = ylist + '<strong>Year ' + str(ryear) + '</strong></a><br /><td />\n'
             if j == 5:
                 j = 0
@@ -144,7 +145,7 @@ def acis_sci_run_print_html(html_dir, pyear, pmonth, pday,  pchk):
         hfile = f.read()
         f.close()
         temp  = hfile.replace('#UPDATE#', update)
-        temp1 = temp.replace('#DOY#',     str(pday))
+        temp1 = temp.replace('#DOY#',     str(ydate))
         temp2 = temp1.replace('#DOM#',    str(dom))
         temp3 = temp2.replace('#YEAR#',   str(pyear))
         temp4 = temp3.replace('#YLIST#',  str(ylist))
@@ -163,7 +164,7 @@ def acis_sci_run_print_html(html_dir, pyear, pmonth, pday,  pchk):
     hfile = f.read()
     f.close()
     temp  = hfile.replace('#UPDATE#', update)
-    temp1 = temp.replace('#DOY#',     str(pday))
+    temp1 = temp.replace('#DOY#',     str(ydate))
     temp2 = temp1.replace('#DOM#',    str(dom))
     temp3 = temp2.replace('#YEAR#',   str(pyear))
 
@@ -179,7 +180,7 @@ def acis_sci_run_print_html(html_dir, pyear, pmonth, pday,  pchk):
     hfile = f.read()
     f.close()
     temp  = hfile.replace('#UPDATE#', update)
-    temp1 = temp.replace('#DOY#',     str(pday))
+    temp1 = temp.replace('#DOY#',     str(ydate))
     temp2 = temp1.replace('#DOM#',    str(dom))
 
     line = html_dir + 'Long_term/science_long_term.html'

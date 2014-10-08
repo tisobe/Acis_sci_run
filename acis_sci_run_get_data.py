@@ -6,7 +6,7 @@
 #                                                                               #
 #       author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                               #
-#       last update: Apr 30, 2013                                               #
+#       last update: Apr 30, 2014                                               #
 #                                                                               #
 #################################################################################
 
@@ -258,7 +258,7 @@ def acis_sci_run_get_data():
 #
 #--- update html pages
 #
-        asrf.acis_sci_run_print_html(web_dir, year, month, day,  'no')
+        asrf.acis_sci_run_print_html(web_dir, year, month, day,  'yes')
 #
 #--- plot trends
 #
@@ -343,8 +343,11 @@ def get_mit_data(tyear):
     else:
         phase_list  = createPhaseList()
         plen        = len(phase_list)
-        last_phase  = phase_list[plen -1]
-        first_phase = last_phase - 3
+        if plen > 3:
+            last_phase  = phase_list[plen -1]
+            first_phase = last_phase - 3
+        else:
+            exit(1)
 
 #
 #--- extract data needed
@@ -836,15 +839,15 @@ def separate_data(file, current_dir):
                 f4.write(line)
             elif col[4] == 'TeHist':
                 f5.write(line)
-            elif col[4] == 'Co1x3':
+            elif col[4] == 'Cc1x3':
                 f6.write(line)
-            elif col[4] == 'Co3x3':
+            elif col[4] == 'Cc3x3':
                 f7.write(line)
-            elif col[4] == 'Co5x5':
+            elif col[4] == 'Cc5x5':
                 f8.write(line)
-            elif col[4] == 'CoRaw':
+            elif col[4] == 'CcRaw':
                 f9.write(line)
-            elif col[4] == 'CoHist':
+            elif col[4] == 'CcHist':
                 f10.write(line)
 
     f1.close()
